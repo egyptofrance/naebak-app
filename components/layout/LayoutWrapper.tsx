@@ -77,13 +77,11 @@ export default function LayoutWrapper({
             pageType={bannerPageType} 
             governorateId={governorateId} 
           />
-          {newsItems.length > 0 && (
-            <NewsBar
-              newsItems={newsItems}
-              direction={newsDirection}
-              speedSeconds={newsSpeedSeconds}
-            />
-          )}
+          <NewsBar
+            newsItems={newsItems}
+            direction={newsDirection}
+            speedSeconds={newsSpeedSeconds}
+          />
         </>
       )}
       <main className="flex-1">

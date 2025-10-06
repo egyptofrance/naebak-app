@@ -21,11 +21,10 @@ const NewsBar: React.FC<NewsBarProps> = ({ newsItems, direction, speedSeconds })
     return () => clearInterval(interval);
   }, [newsItems, speedSeconds]);
 
-  if (newsItems.length === 0) {
-    return null;
-  }
-
-  const currentNews = newsItems[currentNewsIndex];
+  // Show placeholder if no news items
+  const currentNews = newsItems.length > 0 
+    ? newsItems[currentNewsIndex] 
+    : { id: 'placeholder', text: 'تحديث واجهة الموقع لتسهيل التواصل' };
 
   return (
     <div
