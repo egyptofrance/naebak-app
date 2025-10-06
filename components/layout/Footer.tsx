@@ -65,49 +65,54 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-[#004705] text-white py-12">
+    <footer className="bg-[#004705] text-white py-8">
       <div className="container mx-auto px-4">
-        {/* Top Section: White Logo */}
-        <div className="text-center mb-8">
-          <Image
-            src="/logo-naebak-white.png"
-            alt="نائبك.com"
-            width={200}
-            height={80}
-            className="mx-auto"
-            priority
-          />
-        </div>
-
-        {/* Middle Section: Copyright Text */}
-        <div className="text-center mb-8">
-          <p className="text-sm text-gray-300">
-            © {new Date().getFullYear()} نائبك.com - جميع الحقوق محفوظة
-          </p>
-        </div>
-
-        {/* Bottom Section: Social Media Icons Only */}
-        <div className="flex justify-center items-center">
-          <div className="flex gap-6">
-            {!isLoading && socialLinks.length > 0 ? (
-              socialLinks.map((link) => (
-                <SocialIcon
-                  key={link.platform}
-                  platform={link.platform}
-                  url={link.url}
-                />
-              ))
-            ) : (
-              // Fallback social icons when no data is available
-              <>
-                <SocialIcon platform="facebook" url="#" />
-                <SocialIcon platform="twitter" url="#" />
-                <SocialIcon platform="instagram" url="#" />
-                <SocialIcon platform="youtube" url="#" />
-                <SocialIcon platform="whatsapp" url="#" />
-              </>
-            )}
+        {/* Responsive Layout */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-4">
+          
+          {/* Left Section: White Logo */}
+          <div className="flex justify-center lg:justify-start">
+            <Image
+              src="/logo-naebak-white.png"
+              alt="نائبك.com"
+              width={150}
+              height={60}
+              className="h-auto"
+              priority
+            />
           </div>
+
+          {/* Center Section: Copyright Text */}
+          <div className="text-center">
+            <p className="text-sm text-gray-300">
+              © {new Date().getFullYear()} نائبك.com - جميع الحقوق محفوظة
+            </p>
+          </div>
+
+          {/* Right Section: Social Media Icons */}
+          <div className="flex justify-center lg:justify-end">
+            <div className="flex gap-4">
+              {!isLoading && socialLinks.length > 0 ? (
+                socialLinks.map((link) => (
+                  <SocialIcon
+                    key={link.platform}
+                    platform={link.platform}
+                    url={link.url}
+                  />
+                ))
+              ) : (
+                // Fallback social icons when no data is available
+                <>
+                  <SocialIcon platform="facebook" url="#" />
+                  <SocialIcon platform="twitter" url="#" />
+                  <SocialIcon platform="instagram" url="#" />
+                  <SocialIcon platform="youtube" url="#" />
+                  <SocialIcon platform="whatsapp" url="#" />
+                </>
+              )}
+            </div>
+          </div>
+          
         </div>
       </div>
     </footer>
