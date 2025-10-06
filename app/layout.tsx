@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Tajawal } from "next/font/google";
 import "./globals.css";
-import NewsBar from "@/components/layout/NewsBar";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import { getNewsItems, getNewsSettings } from "@/lib/news";
+import LayoutWrapperSuspense from "@/components/layout/LayoutWrapperSuspense"; // Suspense wrapper for client component
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,14 +56,15 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${tajawal.className} antialiased`}
       >
-        {newsItems.length > 0 && (
-          <NewsBar
-            newsItems={newsItems}
-            direction={direction as "ltr" | "rtl"}
-            speedSeconds={speedSeconds}
-          />
-        )}
-        {children}
+        <Header />
+        <LayoutWrapperSuspense
+          newsItems={newsItems}
+          newsDirection={direction as "ltr" | "rtl"}
+          newsSpeedSeconds={speedSeconds}
+        >
+          {children}
+        </LayoutWrapperSuspense>
+        <Footer />
       </body>
     </html>
   );
