@@ -64,18 +64,6 @@ export default function Footer() {
     fetchSocialLinks();
   }, []);
 
-  // Quick links as specified in requirements
-  const quickLinks = [
-    { name: 'الرئيسية', href: '/' },
-    { name: 'النواب', href: '/mps' },
-    { name: 'المرشحين', href: '/candidates' },
-    { name: 'الشكاوى', href: '/complaints' },
-    { name: 'من نحن', href: '/about' },
-    { name: 'اتصل بنا', href: '/contact' },
-    { name: 'سياسة الخصوصية', href: '/privacy' },
-    { name: 'شروط الاستخدام', href: '/terms' }
-  ];
-
   return (
     <footer className="bg-[#004705] text-white py-12">
       <div className="container mx-auto px-4">
@@ -91,8 +79,15 @@ export default function Footer() {
           />
         </div>
 
-        {/* Middle Section: Social Media Icons */}
-        <div className="flex justify-center items-center mb-8">
+        {/* Middle Section: Copyright Text */}
+        <div className="text-center mb-8">
+          <p className="text-sm text-gray-300">
+            © {new Date().getFullYear()} نائبك.com - جميع الحقوق محفوظة
+          </p>
+        </div>
+
+        {/* Bottom Section: Social Media Icons Only */}
+        <div className="flex justify-center items-center">
           <div className="flex gap-6">
             {!isLoading && socialLinks.length > 0 ? (
               socialLinks.map((link) => (
@@ -113,28 +108,6 @@ export default function Footer() {
               </>
             )}
           </div>
-        </div>
-
-        {/* Quick Links Section */}
-        <div className="border-t border-white/20 pt-8 mb-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 text-center">
-            {quickLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-white hover:text-gray-300 transition-colors duration-200 text-sm"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom Section: Copyright */}
-        <div className="border-t border-white/20 pt-6 text-center">
-          <p className="text-sm text-gray-300">
-            © {new Date().getFullYear()} نائبك.com - جميع الحقوق محفوظة
-          </p>
         </div>
       </div>
     </footer>
