@@ -66,53 +66,44 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#004705] text-white py-8">
-      <div className="container mx-auto px-4">
-        {/* Responsive Layout */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-4">
-          
-          {/* Left Section: White Logo */}
-          <div className="flex justify-center lg:justify-start">
-            <Image
-              src="/logo-naebak-white.png"
-              alt="نائبك.com"
-              width={150}
-              height={60}
-              className="h-auto"
-              priority
-            />
-          </div>
+      <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+        {/* Logo - Left on large screens, top on small screens */}
+        <div className="mb-4 md:mb-0 md:order-1">
+          <Image
+            src="/logo-naebak-white.png"
+            alt="نائبك.com"
+            width={150}
+            height={60}
+            className="h-auto"
+            priority
+          />
+        </div>
 
-          {/* Center Section: Copyright Text */}
-          <div className="text-center">
-            <p className="text-sm text-gray-300">
-              © {new Date().getFullYear()} نائبك.com - جميع الحقوق محفوظة
-            </p>
-          </div>
+        {/* Copyright - Center on large screens, middle on small screens */}
+        <p className="text-sm mb-4 md:mb-0 md:order-2 md:flex-grow md:text-center">
+          © {new Date().getFullYear()} نائبك.com - جميع الحقوق محفوظة
+        </p>
 
-          {/* Right Section: Social Media Icons */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="flex gap-4">
-              {!isLoading && socialLinks.length > 0 ? (
-                socialLinks.map((link) => (
-                  <SocialIcon
-                    key={link.platform}
-                    platform={link.platform}
-                    url={link.url}
-                  />
-                ))
-              ) : (
-                // Fallback social icons when no data is available
-                <>
-                  <SocialIcon platform="facebook" url="#" />
-                  <SocialIcon platform="twitter" url="#" />
-                  <SocialIcon platform="instagram" url="#" />
-                  <SocialIcon platform="youtube" url="#" />
-                  <SocialIcon platform="whatsapp" url="#" />
-                </>
-              )}
-            </div>
-          </div>
-          
+        {/* Social Icons - Right on large screens, bottom on small screens */}
+        <div className="flex space-x-4 md:order-3">
+          {!isLoading && socialLinks.length > 0 ? (
+            socialLinks.map((link) => (
+              <SocialIcon
+                key={link.platform}
+                platform={link.platform}
+                url={link.url}
+              />
+            ))
+          ) : (
+            // Fallback social icons when no data is available
+            <>
+              <SocialIcon platform="facebook" url="#" />
+              <SocialIcon platform="twitter" url="#" />
+              <SocialIcon platform="instagram" url="#" />
+              <SocialIcon platform="youtube" url="#" />
+              <SocialIcon platform="whatsapp" url="#" />
+            </>
+          )}
         </div>
       </div>
     </footer>
