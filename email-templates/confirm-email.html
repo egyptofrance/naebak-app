@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد البريد الإلكتروني - نائبك.com</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #004705 0%, #006608 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .header-subtitle {
+            color: #ffffff;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 24px;
+            color: #004705;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .message {
+            color: #333333;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .button-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .confirm-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #004705 0%, #006608 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 71, 5, 0.3);
+            transition: transform 0.2s;
+        }
+        .confirm-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 71, 5, 0.4);
+        }
+        .alternative-link {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-right: 4px solid #004705;
+        }
+        .alternative-link p {
+            color: #666666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .alternative-link a {
+            color: #004705;
+            word-break: break-all;
+            font-size: 13px;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #eeeeee;
+        }
+        .footer-text {
+            color: #666666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .footer-links {
+            margin-top: 20px;
+        }
+        .footer-links a {
+            color: #004705;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .social-links {
+            margin-top: 20px;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 8px;
+            color: #004705;
+            font-size: 24px;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 30px;
+        }
+        .warning p {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        @media only screen and (max-width: 600px) {
+            .content {
+                padding: 30px 20px;
+            }
+            .greeting {
+                font-size: 20px;
+            }
+            .message {
+                font-size: 14px;
+            }
+            .confirm-button {
+                padding: 14px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">نائبك.com</div>
+            <div class="header-subtitle">منصة التواصل مع نوابك ومرشحيك</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">مرحباً بك في نائبك.com! 👋</div>
+            
+            <div class="message">
+                <p>شكراً لتسجيلك في منصة نائبك.com - المنصة الإلكترونية التي تربط المواطنين بنوابهم ومرشحيهم في مجلسي النواب والشيوخ.</p>
+                <br>
+                <p>لإكمال عملية التسجيل وتفعيل حسابك، يرجى النقر على الزر أدناه لتأكيد بريدك الإلكتروني:</p>
+            </div>
+
+            <div class="button-container">
+                <a href="{{ .ConfirmationURL }}" class="confirm-button">تأكيد البريد الإلكتروني</a>
+            </div>
+
+            <div class="alternative-link">
+                <p><strong>إذا لم يعمل الزر أعلاه، يمكنك نسخ الرابط التالي ولصقه في متصفحك:</strong></p>
+                <a href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+            </div>
+
+            <div class="warning">
+                <p><strong>⚠️ تنبيه أمني:</strong></p>
+                <p>• هذا الرابط صالح لمدة 24 ساعة فقط</p>
+                <p>• إذا لم تقم بإنشاء هذا الحساب، يرجى تجاهل هذا البريد</p>
+                <p>• لا تشارك هذا الرابط مع أي شخص</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-text">
+                <strong>نائبك.com</strong> - منصة إلكترونية تربط المواطنين بنوابهم ومرشحيهم<br>
+                جميع الحقوق محفوظة © 2025
+            </div>
+            
+            <div class="footer-links">
+                <a href="https://naebak.com">الموقع الرئيسي</a> |
+                <a href="https://naebak.com/about">من نحن</a> |
+                <a href="https://naebak.com/contact">اتصل بنا</a> |
+                <a href="https://naebak.com/privacy">سياسة الخصوصية</a>
+            </div>
+
+            <div class="social-links">
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Twitter">🐦</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="YouTube">📺</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
