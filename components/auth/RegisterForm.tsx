@@ -141,9 +141,6 @@ export default function RegisterForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* الاسم الأول */}
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                الاسم الأول <span className="text-red-500">*</span>
-              </label>
               <input
                 id="firstName"
                 name="firstName"
@@ -152,15 +149,12 @@ export default function RegisterForm() {
                 value={formData.firstName}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل الاسم الأول"
+                placeholder="الاسم الأول *"
               />
             </div>
 
             {/* الاسم الأخير */}
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                الاسم الأخير <span className="text-red-500">*</span>
-              </label>
               <input
                 id="lastName"
                 name="lastName"
@@ -169,15 +163,12 @@ export default function RegisterForm() {
                 value={formData.lastName}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل الاسم الأخير"
+                placeholder="الاسم الأخير *"
               />
             </div>
 
             {/* البريد الإلكتروني */}
             <div className="md:col-span-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                البريد الإلكتروني <span className="text-red-500">*</span>
-              </label>
               <input
                 id="email"
                 name="email"
@@ -187,15 +178,12 @@ export default function RegisterForm() {
                 value={formData.email}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل بريدك الإلكتروني"
+                placeholder="البريد الإلكتروني *"
               />
             </div>
 
             {/* كلمة المرور */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                كلمة المرور <span className="text-red-500">*</span>
-              </label>
               <input
                 id="password"
                 name="password"
@@ -205,15 +193,12 @@ export default function RegisterForm() {
                 value={formData.password}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل كلمة المرور"
+                placeholder="كلمة المرور *"
               />
             </div>
 
             {/* تأكيد كلمة المرور */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                تأكيد كلمة المرور <span className="text-red-500">*</span>
-              </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -223,15 +208,12 @@ export default function RegisterForm() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أعد إدخال كلمة المرور"
+                placeholder="تأكيد كلمة المرور *"
               />
             </div>
 
             {/* رقم الهاتف */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                رقم الهاتف <span className="text-red-500">*</span>
-              </label>
               <input
                 id="phone"
                 name="phone"
@@ -240,15 +222,12 @@ export default function RegisterForm() {
                 value={formData.phone}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل رقم الهاتف"
+                placeholder="رقم الهاتف *"
               />
             </div>
 
             {/* رقم الواتساب */}
             <div>
-              <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700 mb-1">
-                رقم الواتساب <span className="text-red-500">*</span>
-              </label>
               <input
                 id="whatsapp"
                 name="whatsapp"
@@ -257,15 +236,12 @@ export default function RegisterForm() {
                 value={formData.whatsapp}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل رقم الواتساب"
+                placeholder="رقم الواتساب *"
               />
             </div>
 
             {/* المحافظة */}
             <div>
-              <label htmlFor="governorateId" className="block text-sm font-medium text-gray-700 mb-1">
-                المحافظة <span className="text-red-500">*</span>
-              </label>
               <select
                 id="governorateId"
                 name="governorateId"
@@ -274,7 +250,7 @@ export default function RegisterForm() {
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
               >
-                <option value="0">اختر المحافظة</option>
+                <option value="0">المحافظة *</option>
                 {governorates.map((gov) => (
                   <option key={gov.id} value={gov.id}>
                     {gov.name}
@@ -285,9 +261,6 @@ export default function RegisterForm() {
 
             {/* المدينة */}
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                المدينة <span className="text-red-500">*</span>
-              </label>
               <input
                 id="city"
                 name="city"
@@ -296,15 +269,12 @@ export default function RegisterForm() {
                 value={formData.city}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل المدينة"
+                placeholder="المدينة *"
               />
             </div>
 
             {/* القرية */}
             <div>
-              <label htmlFor="village" className="block text-sm font-medium text-gray-700 mb-1">
-                القرية
-              </label>
               <input
                 id="village"
                 name="village"
@@ -312,15 +282,12 @@ export default function RegisterForm() {
                 value={formData.village}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل القرية (اختياري)"
+                placeholder="القرية (اختياري)"
               />
             </div>
 
             {/* تاريخ الميلاد */}
             <div>
-              <label htmlFor="dob" className="block text-sm font-medium text-gray-700 mb-1">
-                تاريخ الميلاد <span className="text-red-500">*</span>
-              </label>
               <input
                 id="dob"
                 name="dob"
@@ -328,15 +295,13 @@ export default function RegisterForm() {
                 required
                 value={formData.dob}
                 onChange={handleChange}
+                placeholder="تاريخ الميلاد *"
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
               />
             </div>
 
             {/* الجنس */}
             <div>
-              <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
-                الجنس <span className="text-red-500">*</span>
-              </label>
               <select
                 id="gender"
                 name="gender"
@@ -345,7 +310,7 @@ export default function RegisterForm() {
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
               >
-                <option value="">اختر الجنس</option>
+                <option value="">الجنس *</option>
                 <option value="male">ذكر</option>
                 <option value="female">أنثى</option>
               </select>
@@ -353,9 +318,6 @@ export default function RegisterForm() {
 
             {/* الوظيفة */}
             <div>
-              <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-1">
-                الوظيفة <span className="text-red-500">*</span>
-              </label>
               <input
                 id="jobTitle"
                 name="jobTitle"
@@ -364,7 +326,7 @@ export default function RegisterForm() {
                 value={formData.jobTitle}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
-                placeholder="أدخل الوظيفة"
+                placeholder="الوظيفة *"
               />
             </div>
           </div>

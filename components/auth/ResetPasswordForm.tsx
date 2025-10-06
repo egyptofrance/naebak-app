@@ -65,9 +65,6 @@ export default function ResetPasswordForm() {
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                كلمة المرور الجديدة
-              </label>
               <input
                 id="password"
                 name="password"
@@ -77,14 +74,11 @@ export default function ResetPasswordForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] focus:z-10 sm:text-sm"
-                placeholder="أدخل كلمة المرور الجديدة"
+                placeholder="كلمة المرور الجديدة"
               />
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                تأكيد كلمة المرور
-              </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -94,7 +88,7 @@ export default function ResetPasswordForm() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] focus:z-10 sm:text-sm"
-                placeholder="أعد إدخال كلمة المرور"
+                placeholder="تأكيد كلمة المرور"
               />
             </div>
           </div>
