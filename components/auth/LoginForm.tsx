@@ -63,9 +63,6 @@ export default function LoginForm() {
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                البريد الإلكتروني
-              </label>
               <input
                 id="email"
                 name="email"
@@ -75,14 +72,11 @@ export default function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] focus:z-10 sm:text-sm"
-                placeholder="أدخل بريدك الإلكتروني"
+                placeholder="البريد الإلكتروني"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                كلمة المرور
-              </label>
               <input
                 id="password"
                 name="password"
@@ -92,7 +86,7 @@ export default function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] focus:z-10 sm:text-sm"
-                placeholder="أدخل كلمة المرور"
+                placeholder="كلمة المرور"
               />
             </div>
           </div>

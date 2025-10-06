@@ -108,13 +108,23 @@ export default function Header() {
                     <UserMenu user={user} />
                   </>
                 ) : (
-                  /* زر تسجيل الدخول */
-                  <Link
-                    href="/login"
-                    className="bg-[#004705] text-white px-6 py-2 rounded-lg hover:bg-[#003604] transition-colors font-medium text-sm"
-                  >
-                    تسجيل الدخول
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    {/* زر التسجيل */}
+                    <Link
+                      href="/register"
+                      className="bg-white text-[#004705] border-2 border-[#004705] px-4 py-2 rounded-lg hover:bg-[#f5f5f5] transition-colors font-medium text-sm"
+                    >
+                      تسجيل
+                    </Link>
+                    
+                    {/* زر تسجيل الدخول */}
+                    <Link
+                      href="/login"
+                      className="bg-[#004705] text-white px-4 py-2 rounded-lg hover:bg-[#003604] transition-colors font-medium text-sm"
+                    >
+                      دخول
+                    </Link>
+                  </div>
                 )}
               </>
             )}

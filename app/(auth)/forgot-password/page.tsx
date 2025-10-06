@@ -1,5 +1,3 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm';
 
 export const metadata = {
@@ -9,12 +7,8 @@ export const metadata = {
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-grow">
-        <ForgotPasswordForm />
-      </main>
-      <Footer />
-    </div>
+    <main className="flex-grow">
+      <ForgotPasswordForm />
+    </main>
   );
 }
