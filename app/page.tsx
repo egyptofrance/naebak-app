@@ -1,10 +1,6 @@
-import Header from '@/components/layout/Header';
-
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <Header />
-      
       <main className="container mx-auto px-4 py-12">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-[#004705] mb-4">
