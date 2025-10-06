@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Tajawal } from "next/font/google";
 
 export const tajawal = Tajawal({
@@ -7,7 +6,6 @@ export const tajawal = Tajawal({
   variable: "--font-tajawal",
 });
 
-=======
 /**
  * إعدادات الخطوط لمنصة نائبك
  * 
@@ -45,4 +43,4 @@ export const FONTS = {
 
 export type FontWeight = keyof typeof FONTS.weights;
 export type FontSize = keyof typeof FONTS.sizes;
->>>>>>> 90a58f237a920ab2e42680104987011ed2dc0ee6
+
