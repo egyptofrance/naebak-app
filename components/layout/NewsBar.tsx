@@ -1,39 +1,65 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from "react";
 
 interface NewsBarProps {
   newsItems: { id: string; text: string }[];
-  direction: 'ltr' | 'rtl';
+  direction: "ltr" | "rtl";
   speedSeconds: number;
 }
 
 const NewsBar: React.FC<NewsBarProps> = ({ newsItems, direction, speedSeconds }) => {
+  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
+
+  useEffect(() => {
+    if (newsItems.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentNewsIndex((prevIndex) => (prevIndex + 1) % newsItems.length);
+    }, speedSeconds * 1000);
+
+    return () => clearInterval(interval);
+  }, [newsItems, speedSeconds]);
+
+  if (newsItems.length === 0) {
+    return null;
+  }
+
+  const currentNews = newsItems[currentNewsIndex];
+
   return (
-    <div className="relative bg-gray-dark text-white overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-secondary"></div>
-      <div className="absolute bottom-0 left-0 w-full h-[4px] bg-secondary"></div>
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-light mt-[4px]"></div>
+    <div
+      className="relative w-full overflow-hidden bg-gray-dark text-white"
+      style={{
+        borderTop: "2px solid var(--color-secondary)",
+        borderBottom: "4px solid var(--color-secondary)",
+      }}
+    >
       <div
-        className="flex whitespace-nowrap py-2"
+        className="absolute bottom-0 left-0 w-full"
+        style={{
+          height: "2px",
+          backgroundColor: "var(--color-gray-dark)",
+          transform: "translateY(4px)", // Offset by the 4px orange line
+        }}
+      ></div>
+      <div
+        className={`relative py-2 px-4 whitespace-nowrap`}
         style={{
           animation: `scroll-${direction} ${speedSeconds}s linear infinite`,
-          direction: direction,
         }}
       >
-        {newsItems.map((item) => (
-          <span key={item.id} className="mx-4 text-sm">
-            {item.text}
-          </span>
-        ))}
+        {currentNews.text}
       </div>
 
       <style jsx>{`
-        @keyframes scroll-ltr {
-          from { transform: translateX(0%); }
-          to { transform: translateX(-100%); }
-        }
         @keyframes scroll-rtl {
-          from { transform: translateX(-100%); }
-          to { transform: translateX(0%); }
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+        @keyframes scroll-ltr {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
         }
       `}</style>
     </div>
