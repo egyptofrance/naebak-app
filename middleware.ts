@@ -1,10 +1,59 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-  const supabase = createMiddlewareClient({ req, res });
+  let response = NextResponse.next({
+    request: {
+      headers: req.headers,
+    },
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return req.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          req.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: req.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+        },
+        remove(name: string, options: any) {
+          req.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: req.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+        },
+      },
+    }
+  );
 
   // التحقق من الجلسة
   const {
@@ -22,12 +71,12 @@ export async function middleware(req: NextRequest) {
     '/reset-password',
     '/auth/callback',
     '/test-banner',
-    '/test-components',
     '/mps',
     '/candidates',
     '/complaints',
     '/about',
     '/contact',
+    '/unauthorized',
   ];
 
   // Check if the current path is public
@@ -35,7 +84,7 @@ export async function middleware(req: NextRequest) {
 
   // If the route is public, allow access
   if (isPublicRoute) {
-    return res;
+    return response;
   }
 
   // Protected routes require authentication
@@ -97,7 +146,7 @@ export async function middleware(req: NextRequest) {
 
       // Dashboard is accessible to all authenticated users
       if (path === '/dashboard') {
-        return res;
+        return response;
       }
     } catch (error) {
       console.error('Middleware error:', error);
@@ -105,7 +154,7 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  return res;
+  return response;
 }
 
 export const config = {
