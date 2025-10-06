@@ -46,7 +46,7 @@ export default function Banner({ pageType, governorateId = null }: BannerProps) 
   if (isLoading) {
     return (
       <div className="w-full bg-gray-200 animate-pulse">
-        <div className="h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 bg-gray-300"></div>
+        <div className="h-64 bg-gray-300"></div>
       </div>
     );
   }
@@ -55,7 +55,7 @@ export default function Banner({ pageType, governorateId = null }: BannerProps) 
   if (error || !bannerUrl) {
     return (
       <div className="w-full bg-gradient-to-r from-primary/10 to-secondary/10">
-        <div className="h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 flex items-center justify-center">
+        <div className="h-64 flex items-center justify-center">
           <div className="text-center text-gray-600">
             <div className="w-16 h-16 mx-auto mb-4 bg-gray-300 rounded-lg flex items-center justify-center">
               <svg 
@@ -81,17 +81,19 @@ export default function Banner({ pageType, governorateId = null }: BannerProps) 
 
   return (
     <div className="w-full relative overflow-hidden">
-      {/* Responsive container with aspect ratio preservation */}
-      <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80">
+      {/* Full height container that preserves original image dimensions */}
+      <div className="relative w-full">
         <Image
           src={bannerUrl}
           alt="Platform Banner"
-          fill
+          width={1920}
+          height={0}
           priority
-          className="object-cover object-center"
+          className="w-full h-auto object-cover"
           onError={handleImageError}
           sizes="100vw"
           quality={90}
+          style={{ height: 'auto' }}
         />
       </div>
       

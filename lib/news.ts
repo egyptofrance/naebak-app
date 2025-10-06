@@ -7,29 +7,51 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function getNewsItems() {
-  const { data: newsItems, error } = await supabase
-    .from("news")
-    .select("id, text")
-    .eq("is_active", true)
-    .order("created_at", { ascending: false });
+  try {
+    // Return empty array if Supabase is not configured
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.warn("Supabase not configured, returning empty news items");
+      return [];
+    }
 
-  if (error) {
+    const { data: newsItems, error } = await supabase
+      .from("news")
+      .select("id, text")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching news items:", error);
+      return [];
+    }
+    return newsItems || [];
+  } catch (error) {
     console.error("Error fetching news items:", error);
     return [];
   }
-  return newsItems;
 }
 
 export async function getNewsSettings() {
-  const { data: settings, error } = await supabase
-    .from("news_settings")
-    .select("direction, speed_seconds")
-    .single();
+  try {
+    // Return default settings if Supabase is not configured
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.warn("Supabase not configured, returning default news settings");
+      return { direction: "rtl", speed_seconds: 30 };
+    }
 
-  if (error) {
+    const { data: settings, error } = await supabase
+      .from("news_settings")
+      .select("direction, speed_seconds")
+      .single();
+
+    if (error) {
+      console.error("Error fetching news settings:", error);
+      return { direction: "rtl", speed_seconds: 30 };
+    }
+    return settings || { direction: "rtl", speed_seconds: 30 };
+  } catch (error) {
     console.error("Error fetching news settings:", error);
-    return null;
+    return { direction: "rtl", speed_seconds: 30 };
   }
-  return settings;
 }
 

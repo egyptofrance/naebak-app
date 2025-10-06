@@ -40,16 +40,15 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const newsItems = await getNewsItems();
-  const newsSettings = await getNewsSettings();
-
-  const direction = newsSettings?.direction || "rtl"; // Default to rtl if not set
-  const speedSeconds = newsSettings?.speed_seconds || 30; // Default speed
+  // Use default values for now to avoid server-side errors
+  const newsItems: any[] = [];
+  const direction = "rtl";
+  const speedSeconds = 30;
 
   return (
     <html lang="ar" dir={direction}>
