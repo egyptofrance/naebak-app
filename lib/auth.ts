@@ -1,16 +1,8 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 
 // Client-side Supabase client
 export const createClient = () => {
   return createClientComponentClient();
-};
-
-// Server-side Supabase client
-export const createServerClient = async () => {
-  const cookieStore = await cookies();
-  return createServerComponentClient({ cookies: () => cookieStore });
 };
 
 // Sign in with email and password
