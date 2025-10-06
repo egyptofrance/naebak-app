@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-export const colors = {
-  primary: '#004705',    // أخضر
-  secondary: '#e86202',  // برتقالي
-  gray: {
-    dark: '#333333',     // رمادي داكن
-    light: '#f5f5f5',    // رمادي فاتح
-  },
-};
-
-=======
 /**
  * الألوان الرسمية لمنصة نائبك
  * 
@@ -39,4 +28,4 @@ export const COLORS = {
 } as const;
 
 export type ColorName = keyof typeof COLORS;
->>>>>>> 90a58f237a920ab2e42680104987011ed2dc0ee6
+
