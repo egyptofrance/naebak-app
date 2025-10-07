@@ -177,12 +177,6 @@ export default function RegisterForm() {
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              {error}
-            </div>
-          )}
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* نوع الحساب */}
             <div className="md:col-span-2">
@@ -536,6 +530,12 @@ export default function RegisterForm() {
 
           {/* زر التسجيل */}
           <div>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-center">
+                {error}
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={isLoading}
