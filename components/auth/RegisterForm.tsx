@@ -3,16 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { signUpWithEmail, getGovernorates } from '@/lib/auth';
-
-interface Governorate {
-  id: number;
-  name: string;
-}
+import { signUpWithEmailAndProfile } from '@/lib/auth';
+import { getGovernorates, getCouncils, getParties, getSymbols } from '@/lib/supabase-queries';
+import type { Governorate, Council, Party, Symbol } from '@/lib/supabase-queries';
 
 export default function RegisterForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
+    // البيانات الأساسية
     firstName: '',
     lastName: '',
     email: '',
@@ -27,20 +25,40 @@ export default function RegisterForm() {
     gender: '',
     jobTitle: '',
     acceptTerms: false,
+    
+    // البيانات الجديدة
+    accountType: 'citizen' as 'citizen' | 'mp' | 'candidate',
+    councilId: 0,
+    partyId: 0,
+    isIndependent: false,
+    electoralSymbolId: 0,
+    electoralNumber: '',
+    district: '',
+    committee: '',
   });
 
   const [governorates, setGovernorates] = useState<Governorate[]>([]);
+  const [councils, setCouncils] = useState<Council[]>([]);
+  const [parties, setParties] = useState<Party[]>([]);
+  const [symbols, setSymbols] = useState<Symbol[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    async function fetchGovernorates() {
-      const { governorates: data, error } = await getGovernorates();
-      if (!error && data) {
-        setGovernorates(data);
-      }
+    async function fetchData() {
+      const [govs, couns, parts, syms] = await Promise.all([
+        getGovernorates(),
+        getCouncils(),
+        getParties(),
+        getSymbols(),
+      ]);
+      
+      setGovernorates(govs);
+      setCouncils(couns);
+      setParties(parts);
+      setSymbols(syms);
     }
-    fetchGovernorates();
+    fetchData();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -79,10 +97,28 @@ export default function RegisterForm() {
       return;
     }
 
+    // Validation للنواب والمرشحين
+    if (formData.accountType !== 'citizen') {
+      if (!formData.councilId || formData.councilId === 0) {
+        setError('يرجى اختيار المجلس');
+        return;
+      }
+      
+      if (!formData.isIndependent && (!formData.partyId || formData.partyId === 0)) {
+        setError('يرجى اختيار الحزب أو تحديد مستقل');
+        return;
+      }
+      
+      if (!formData.district) {
+        setError('يرجى إدخال الدائرة الانتخابية');
+        return;
+      }
+    }
+
     setIsLoading(true);
 
     try {
-      const { user, error: signUpError } = await signUpWithEmail({
+      const { user, error: signUpError } = await signUpWithEmailAndProfile({
         email: formData.email,
         password: formData.password,
         firstName: formData.firstName,
@@ -95,6 +131,14 @@ export default function RegisterForm() {
         dob: formData.dob,
         gender: formData.gender,
         jobTitle: formData.jobTitle,
+        accountType: formData.accountType,
+        councilId: formData.councilId || undefined,
+        partyId: formData.partyId || undefined,
+        isIndependent: formData.isIndependent,
+        electoralSymbolId: formData.electoralSymbolId || undefined,
+        electoralNumber: formData.electoralNumber || undefined,
+        district: formData.district || undefined,
+        committee: formData.committee || undefined,
       });
 
       if (signUpError) {
@@ -104,7 +148,6 @@ export default function RegisterForm() {
       }
 
       if (user) {
-        // Redirect to login page with success message
         router.push('/login?registered=true');
       }
     } catch (err) {
@@ -112,6 +155,8 @@ export default function RegisterForm() {
       setIsLoading(false);
     }
   };
+
+  const showPoliticalFields = formData.accountType !== 'citizen';
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -139,6 +184,22 @@ export default function RegisterForm() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* نوع الحساب */}
+            <div className="md:col-span-2">
+              <select
+                id="accountType"
+                name="accountType"
+                required
+                value={formData.accountType}
+                onChange={handleChange}
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
+              >
+                <option value="citizen">مواطن</option>
+                <option value="mp">نائب حالي</option>
+                <option value="candidate">مرشح</option>
+              </select>
+            </div>
+
             {/* الاسم الأول */}
             <div>
               <input
@@ -329,6 +390,126 @@ export default function RegisterForm() {
                 placeholder="الوظيفة *"
               />
             </div>
+
+            {/* الحقول السياسية (تظهر فقط للنواب والمرشحين) */}
+            {showPoliticalFields && (
+              <>
+                {/* المجلس */}
+                <div className="md:col-span-2">
+                  <select
+                    id="councilId"
+                    name="councilId"
+                    required
+                    value={formData.councilId}
+                    onChange={handleChange}
+                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
+                  >
+                    <option value="0">المجلس *</option>
+                    {councils.map((council) => (
+                      <option key={council.id} value={council.id}>
+                        {council.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* مستقل؟ */}
+                <div className="md:col-span-2 flex items-center">
+                  <input
+                    id="isIndependent"
+                    name="isIndependent"
+                    type="checkbox"
+                    checked={formData.isIndependent}
+                    onChange={handleChange}
+                    className="h-4 w-4 text-[#004705] focus:ring-[#004705] border-gray-300 rounded"
+                  />
+                  <label htmlFor="isIndependent" className="mr-2 block text-sm text-gray-700">
+                    مستقل (بدون حزب)
+                  </label>
+                </div>
+
+                {/* الحزب (يظهر فقط إذا لم يكن مستقل) */}
+                {!formData.isIndependent && (
+                  <div className="md:col-span-2">
+                    <select
+                      id="partyId"
+                      name="partyId"
+                      required={!formData.isIndependent}
+                      value={formData.partyId}
+                      onChange={handleChange}
+                      className="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
+                    >
+                      <option value="0">الحزب *</option>
+                      {parties.map((party) => (
+                        <option key={party.id} value={party.id}>
+                          {party.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* الدائرة الانتخابية */}
+                <div>
+                  <input
+                    id="district"
+                    name="district"
+                    type="text"
+                    required
+                    value={formData.district}
+                    onChange={handleChange}
+                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
+                    placeholder="الدائرة الانتخابية *"
+                  />
+                </div>
+
+                {/* الرمز الانتخابي */}
+                <div>
+                  <select
+                    id="electoralSymbolId"
+                    name="electoralSymbolId"
+                    value={formData.electoralSymbolId}
+                    onChange={handleChange}
+                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
+                  >
+                    <option value="0">الرمز الانتخابي (اختياري)</option>
+                    {symbols.map((symbol) => (
+                      <option key={symbol.id} value={symbol.id}>
+                        {symbol.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* الرقم الانتخابي */}
+                <div>
+                  <input
+                    id="electoralNumber"
+                    name="electoralNumber"
+                    type="text"
+                    value={formData.electoralNumber}
+                    onChange={handleChange}
+                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
+                    placeholder="الرقم الانتخابي (اختياري)"
+                  />
+                </div>
+
+                {/* اللجنة (للنواب فقط) */}
+                {formData.accountType === 'mp' && (
+                  <div>
+                    <input
+                      id="committee"
+                      name="committee"
+                      type="text"
+                      value={formData.committee}
+                      onChange={handleChange}
+                      className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#004705] focus:border-[#004705] sm:text-sm"
+                      placeholder="اللجنة (اختياري)"
+                    />
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* الموافقة على الشروط */}

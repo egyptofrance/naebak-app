@@ -223,3 +223,101 @@ export async function getGovernorates() {
 
   return { governorates: data || [], error: error ? error.message : null };
 }
+
+// Sign up with email, password, and profile (for all account types)
+export async function signUpWithEmailAndProfile(formData: {
+  // البيانات الأساسية
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  whatsapp: string;
+  governorateId: number;
+  city: string;
+  village: string;
+  dob: string;
+  gender: string;
+  jobTitle: string;
+  
+  // البيانات السياسية
+  accountType: 'citizen' | 'mp' | 'candidate';
+  councilId?: number;
+  partyId?: number;
+  isIndependent?: boolean;
+  electoralSymbolId?: number;
+  electoralNumber?: string;
+  district?: string;
+  committee?: string;
+}) {
+  const supabase = createClient();
+
+  // 1. Create user in Supabase Auth
+  const { data: authData, error: authError } = await supabase.auth.signUp({
+    email: formData.email,
+    password: formData.password,
+  });
+
+  if (authError) {
+    return { user: null, error: authError.message };
+  }
+
+  if (!authData.user) {
+    return { user: null, error: 'فشل في إنشاء الحساب' };
+  }
+
+  // 2. Determine role_id based on accountType
+  let roleId = 3; // citizen
+  if (formData.accountType === 'mp') roleId = 4;
+  if (formData.accountType === 'candidate') roleId = 5;
+
+  // 3. Create record in users table
+  const { data: userData, error: userError } = await supabase
+    .from('users')
+    .insert({
+      auth_id: authData.user.id,
+      role_id: roleId,
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      whatsapp: formData.whatsapp,
+      governorate_id: formData.governorateId,
+      city: formData.city,
+      village: formData.village,
+      dob: formData.dob,
+      gender: formData.gender,
+      job_title: formData.jobTitle,
+    })
+    .select()
+    .single();
+
+  if (userError) {
+    console.error('User creation error:', userError);
+    return { user: null, error: 'فشل في إنشاء حساب المستخدم' };
+  }
+
+  // 4. If MP or Candidate, create profile
+  if (formData.accountType !== 'citizen') {
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .insert({
+        user_id: userData.id,
+        council_id: formData.councilId || null,
+        party_id: formData.partyId || null,
+        is_independent: formData.isIndependent || false,
+        electoral_symbol_id: formData.electoralSymbolId || null,
+        electoral_number: formData.electoralNumber || null,
+        district: formData.district || null,
+        committee: formData.committee || null,
+      });
+
+    if (profileError) {
+      console.error('Profile creation error:', profileError);
+      // Don't fail the whole registration if profile creation fails
+      // The user can update their profile later
+    }
+  }
+
+  return { user: userData, error: null };
+}
