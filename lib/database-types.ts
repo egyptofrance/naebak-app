@@ -128,8 +128,8 @@ export interface RepresentativeRegistrationData {
   councilType: 'parliament' | 'senate';
   party?: string;
   bio?: string;
-  profileImage?: File;
-  bannerImage?: File;
+  profileImage?: File | null;
+  bannerImage?: File | null;
   contactEmail?: string;
   contactPhone?: string;
   parliamentaryCommittee?: string;
