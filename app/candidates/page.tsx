@@ -161,7 +161,7 @@ export default function CandidatesPage() {
 
         // Get total count
         const { count } = await query
-          .select('*', { count: 'exact', head: true });
+          .select('id', { count: 'exact', head: true });
 
         // Get paginated results
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
