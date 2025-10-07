@@ -67,6 +67,8 @@ export default function RegisterForm() {
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({ ...prev, [name]: checked }));
+    } else if (name === 'governorateId') {
+      setFormData((prev) => ({ ...prev, [name]: parseInt(value, 10) }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
