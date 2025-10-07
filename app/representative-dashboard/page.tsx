@@ -57,7 +57,7 @@ export default function RepresentativeDashboard() {
       content: 'أود الاستفسار عن موعد بدء مشروع تطوير الطرق في منطقتنا...',
           status: 'sent',
           created_at: '2025-01-15T10:00:00Z',
-      updated_at: '2025-01-15T10:00:00Z',
+          updated_at: '2025-01-15T10:00:00Z',
     },
     {
       id: 'msg_rep_2',
@@ -67,7 +67,7 @@ export default function RepresentativeDashboard() {
       content: 'أقترح إنشاء مركز صحي جديد في المنطقة...',
           status: 'read',
           created_at: '2025-01-10T10:00:00Z',
-      updated_at: '2025-01-10T10:00:00Z',
+          updated_at: '2025-01-10T10:00:00Z',
     },
   ]);
 
