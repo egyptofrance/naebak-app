@@ -241,7 +241,7 @@ export default function FAQPage() {
               </a>
               <a
                 href="mailto:support@naebak.com"
-                className="bg-white bg-opacity-10 hover:bg-opacity-20 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 border-2 border-white hover:text-[#004705] hover:bg-white"
+                className="bg-white text-[#004705] px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 border-2 border-white hover:bg-[#FF8C00] hover:text-black"
               >
                 أرسل بريد إلكتروني
               </a>
