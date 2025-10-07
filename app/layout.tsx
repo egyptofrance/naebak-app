@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getNewsItems, getNewsSettings } from "@/lib/news";
 import LayoutWrapperSuspense from "@/components/layout/LayoutWrapperSuspense"; // Suspense wrapper for client component
+import LoadingLayout from "@/components/layout/LoadingLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,15 +56,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${tajawal.className} antialiased`}
       >
-        <Header />
-        <LayoutWrapperSuspense
-          newsItems={newsItems}
-          newsDirection={direction as "ltr" | "rtl"}
-          newsSpeedSeconds={speedSeconds}
+        <LoadingLayout
+          header={<Header />}
+          footer={<Footer />}
+          minLoadingTime={800}
         >
-          {children}
-        </LayoutWrapperSuspense>
-        <Footer />
+          <LayoutWrapperSuspense
+            newsItems={newsItems}
+            newsDirection={direction as "ltr" | "rtl"}
+            newsSpeedSeconds={speedSeconds}
+          >
+            {children}
+          </LayoutWrapperSuspense>
+        </LoadingLayout>
       </body>
     </html>
   );
