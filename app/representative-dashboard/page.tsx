@@ -79,7 +79,7 @@ export default function RepresentativeDashboard() {
       description: 'انقطاع المياه في منطقة الحي الثالث لأكثر من أسبوع',
       category: 'خدمات عامة',
       priority: 'high',
-      date: '2025-01-12',
+
       status: 'assigned',
       assigned_to: 'rep_1',
       created_at: '2025-01-12T10:00:00Z',
@@ -92,7 +92,7 @@ export default function RepresentativeDashboard() {
       description: 'الطرق في حالة سيئة جداً وتحتاج إلى إصلاح عاجل',
       category: 'بنية تحتية',
       priority: 'urgent',
-      date: '2025-01-08',
+
       status: 'in_progress',
       assigned_to: 'rep_1',
       created_at: '2025-01-08T10:00:00Z',
