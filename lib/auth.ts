@@ -1,8 +1,7 @@
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
 
 // Get current user
 export async function getCurrentUser() {
-  
   const { data: { user }, error } = await supabase.auth.getUser();
   
   if (error || !user) {
@@ -96,8 +95,8 @@ export async function signUpWithEmailAndProfile(formData: {
     roleId = 5; // Candidate
   }
 
-  // 2. Create record in users table
-  const { data: userData, error: userError } = await supabase
+  // 2. Create record in users table (using admin client to bypass RLS)
+  const { data: userData, error: userError } = await supabaseAdmin
     .from('users')
     .insert({
       auth_id: authData.user.id,
@@ -139,14 +138,14 @@ export async function signUpWithEmailAndProfile(formData: {
       profileData.electoral_number = formData.electoralNumber;
     }
 
-    const { error: profileError } = await supabase
+    const { error: profileError } = await supabaseAdmin
       .from('profiles')
       .insert(profileData);
 
     if (profileError) {
       console.error('Profile creation error:', profileError);
       // Delete user if profile creation fails
-      await supabase.from('users').delete().eq('id', userData.id);
+      await supabaseAdmin.from('users').delete().eq('id', userData.id);
       return { user: null, error: 'فشل في إنشاء الملف الشخصي: ' + profileError.message };
     }
   }
