@@ -135,8 +135,8 @@ export default function MPsPage() {
         }
 
         // Get total count
-        const { count } = await query
-          .select('id', { count: 'exact', head: true });
+        const countResult = await query.select('*', { count: 'exact', head: true });
+        const count = countResult.count;
 
         // Get paginated results
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
