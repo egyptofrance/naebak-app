@@ -226,8 +226,7 @@ export default function FAQPage() {
         {/* قسم المساعدة الإضافية */}
         <div className="mt-16 bg-[#004705] text-white p-8 rounded-lg shadow-lg">
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-6 flex items-center justify-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">💡</span>
+            <h2 className="text-3xl font-bold mb-6">
               لم تجد إجابة لسؤالك؟
             </h2>
             <p className="text-xl leading-relaxed mb-8">
@@ -242,7 +241,7 @@ export default function FAQPage() {
               </a>
               <a
                 href="mailto:support@naebak.com"
-                className="bg-white bg-opacity-10 hover:bg-opacity-20 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 border-2 border-white"
+                className="bg-white bg-opacity-10 hover:bg-opacity-20 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 border-2 border-white hover:text-[#004705] hover:bg-white"
               >
                 أرسل بريد إلكتروني
               </a>
@@ -253,19 +252,16 @@ export default function FAQPage() {
         {/* نصائح سريعة */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100 text-center">
-            <div className="text-4xl text-[#FF8C00] mb-4">🚀</div>
             <h3 className="text-xl font-semibold text-[#004705] mb-3">ابدأ بسرعة</h3>
             <p className="text-gray-700">سجل حسابك واكتشف نوابك في دقائق معدودة</p>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100 text-center">
-            <div className="text-4xl text-[#FF8C00] mb-4">🔒</div>
             <h3 className="text-xl font-semibold text-[#004705] mb-3">آمن ومحمي</h3>
             <p className="text-gray-700">جميع بياناتك ومراسلاتك محمية بأعلى معايير الأمان</p>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100 text-center">
-            <div className="text-4xl text-[#FF8C00] mb-4">📱</div>
             <h3 className="text-xl font-semibold text-[#004705] mb-3">متاح دائماً</h3>
             <p className="text-gray-700">استخدم المنصة من أي جهاز وفي أي وقت</p>
           </div>

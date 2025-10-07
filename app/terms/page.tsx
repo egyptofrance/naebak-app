@@ -18,13 +18,12 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8">
+        <div className="space-y-8">
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">📋</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               تعريفات أساسية
             </h2>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="text-xl font-semibold text-[#004705] mb-2">المنصة:</h3>
                 <p className="text-lg text-gray-700">تطبيق ومنصة "نائبك" الإلكترونية وجميع خدماتها المرتبطة.</p>
@@ -45,12 +44,11 @@ export default function TermsPage() {
           </section>
 
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">✅</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               قبول الشروط
             </h2>
-            <div className="space-y-4">
-              <p className="text-lg text-gray-700">
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <p className="text-lg text-gray-700 mb-4">
                 باستخدامك للمنصة، فإنك تؤكد أنك:
               </p>
               <ul className="list-disc list-inside text-lg text-gray-700 space-y-3 ml-4">
@@ -64,14 +62,13 @@ export default function TermsPage() {
           </section>
 
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">🎯</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               استخدام المنصة
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-xl font-semibold text-[#004705] mb-3">الاستخدام المسموح:</h3>
-                <ul className="list-disc list-inside text-lg text-gray-700 space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-400">
+                <h3 className="text-xl font-semibold text-green-800 mb-3">الاستخدام المسموح:</h3>
+                <ul className="list-disc list-inside text-lg text-green-700 space-y-2">
                   <li>التواصل مع النواب والمرشحين</li>
                   <li>تقديم الشكاوى والاقتراحات</li>
                   <li>تقييم أداء النواب بصدق</li>
@@ -79,9 +76,9 @@ export default function TermsPage() {
                   <li>الوصول إلى المعلومات العامة</li>
                 </ul>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-red-600 mb-3">الاستخدام المحظور:</h3>
-                <ul className="list-disc list-inside text-lg text-gray-700 space-y-2">
+              <div className="bg-red-50 p-6 rounded-lg border-l-4 border-red-400">
+                <h3 className="text-xl font-semibold text-red-800 mb-3">الاستخدام المحظور:</h3>
+                <ul className="list-disc list-inside text-lg text-red-700 space-y-2">
                   <li>نشر محتوى مسيء أو مهين</li>
                   <li>التحريض على العنف أو الكراهية</li>
                   <li>انتحال الشخصية أو التضليل</li>
@@ -93,21 +90,22 @@ export default function TermsPage() {
           </section>
 
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">👤</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               الحسابات والتسجيل
             </h2>
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-[#004705] mb-3">متطلبات التسجيل:</h3>
-              <ul className="list-disc list-inside text-lg text-gray-700 space-y-3 ml-4">
-                <li>تقديم معلومات شخصية صحيحة وحديثة</li>
-                <li>التحقق من الهوية باستخدام الرقم القومي</li>
-                <li>إنشاء كلمة مرور قوية وآمنة</li>
-                <li>الحفاظ على سرية بيانات الدخول</li>
-                <li>إشعارنا فوراً في حالة اختراق الحساب</li>
-              </ul>
+            <div className="space-y-6">
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold text-[#004705] mb-3">متطلبات التسجيل:</h3>
+                <ul className="list-disc list-inside text-lg text-gray-700 space-y-3 ml-4">
+                  <li>تقديم معلومات شخصية صحيحة وحديثة</li>
+                  <li>التحقق من الهوية باستخدام الرقم القومي</li>
+                  <li>إنشاء كلمة مرور قوية وآمنة</li>
+                  <li>الحفاظ على سرية بيانات الدخول</li>
+                  <li>إشعارنا فوراً في حالة اختراق الحساب</li>
+                </ul>
+              </div>
               
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
                 <p className="text-lg text-yellow-800">
                   <strong>تنبيه:</strong> أنت مسؤول عن جميع الأنشطة التي تتم من خلال حسابك. 
                   يجب عليك الحفاظ على أمان بيانات الدخول الخاصة بك.
@@ -117,12 +115,11 @@ export default function TermsPage() {
           </section>
 
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">📝</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               المحتوى والمسؤوليات
             </h2>
-            <div className="space-y-6">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-[#004705] mb-3">محتوى المستخدم:</h3>
                 <ul className="list-disc list-inside text-lg text-gray-700 space-y-2 ml-4">
                   <li>أنت مسؤول عن جميع المحتوى الذي تنشره</li>
@@ -132,7 +129,7 @@ export default function TermsPage() {
                 </ul>
               </div>
               
-              <div>
+              <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-[#004705] mb-3">حقوق المنصة:</h3>
                 <ul className="list-disc list-inside text-lg text-gray-700 space-y-2 ml-4">
                   <li>مراجعة ومراقبة المحتوى المنشور</li>
@@ -145,8 +142,7 @@ export default function TermsPage() {
           </section>
 
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">🛡️</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               الخصوصية والأمان
             </h2>
             <div className="space-y-4">
@@ -171,11 +167,10 @@ export default function TermsPage() {
           </section>
 
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">⚖️</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               المسؤولية القانونية
             </h2>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-red-50 border-l-4 border-red-400 p-4">
                 <h3 className="text-xl font-semibold text-red-800 mb-2">إخلاء المسؤولية:</h3>
                 <ul className="list-disc list-inside text-lg text-red-700 space-y-2 ml-4">
@@ -199,12 +194,11 @@ export default function TermsPage() {
           </section>
 
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">🚫</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               إنهاء الخدمة
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-[#004705] mb-3">إنهاء من قبل المستخدم:</h3>
                 <ul className="list-disc list-inside text-lg text-gray-700 space-y-2">
                   <li>يمكنك إلغاء حسابك في أي وقت</li>
@@ -212,7 +206,7 @@ export default function TermsPage() {
                   <li>قد تبقى بعض البيانات لأغراض قانونية</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-[#004705] mb-3">إنهاء من قبل المنصة:</h3>
                 <ul className="list-disc list-inside text-lg text-gray-700 space-y-2">
                   <li>في حالة انتهاك الشروط والأحكام</li>
@@ -223,42 +217,51 @@ export default function TermsPage() {
             </div>
           </section>
 
-          <section className="bg-[#004705] text-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-3xl font-bold mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">📞</span>
+          <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               التواصل وحل النزاعات
             </h2>
-            <div className="space-y-4">
-              <p className="text-lg leading-relaxed">
+            <div className="space-y-6">
+              <p className="text-lg text-gray-700 leading-relaxed">
                 في حالة وجود أي نزاع أو استفسار حول هذه الشروط، يرجى التواصل معنا أولاً لحل المشكلة ودياً.
               </p>
-              <div className="bg-white bg-opacity-10 p-4 rounded-lg">
-                <ul className="text-lg space-y-2">
-                  <li><strong>البريد الإلكتروني:</strong> legal@naebak.com</li>
-                  <li><strong>الهاتف:</strong> +20 123 456 7890</li>
-                  <li><strong>العنوان:</strong> القاهرة، مصر</li>
-                </ul>
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                  <div>
+                    <h4 className="font-semibold text-[#004705] mb-2">البريد الإلكتروني</h4>
+                    <p className="text-gray-700">legal@naebak.com</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#004705] mb-2">الهاتف</h4>
+                    <p className="text-gray-700">+20 123 456 7890</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#004705] mb-2">العنوان</h4>
+                    <p className="text-gray-700">القاهرة، مصر</p>
+                  </div>
+                </div>
               </div>
-              <p className="text-lg leading-relaxed">
+              <p className="text-lg text-gray-700 leading-relaxed">
                 تخضع هذه الشروط للقانون المصري، وتختص المحاكم المصرية بنظر أي نزاعات قد تنشأ.
               </p>
             </div>
           </section>
 
           <section className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">🔄</span>
+            <h2 className="text-3xl font-bold text-[#004705] mb-6 border-b-2 border-[#FF8C00] pb-3">
               تعديل الشروط
             </h2>
             <div className="space-y-4">
               <p className="text-lg text-gray-700">
                 نحتفظ بالحق في تعديل هذه الشروط والأحكام في أي وقت. سيتم إشعارك بأي تغييرات مهمة عبر:
               </p>
-              <ul className="list-disc list-inside text-lg text-gray-700 space-y-2 ml-4">
-                <li>إشعار على المنصة</li>
-                <li>رسالة بريد إلكتروني</li>
-                <li>رسالة نصية (في حالة التغييرات الجوهرية)</li>
-              </ul>
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <ul className="list-disc list-inside text-lg text-gray-700 space-y-2 ml-4">
+                  <li>إشعار على المنصة</li>
+                  <li>رسالة بريد إلكتروني</li>
+                  <li>رسالة نصية (في حالة التغييرات الجوهرية)</li>
+                </ul>
+              </div>
               <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
                 <p className="text-lg text-yellow-800">
                   <strong>مهم:</strong> استمرارك في استخدام المنصة بعد التعديلات يعني موافقتك على الشروط الجديدة.

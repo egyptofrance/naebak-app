@@ -62,11 +62,6 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* نموذج الاتصال */}
           <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-              <span className="text-4xl text-[#FF8C00] mr-4">📝</span>
-              أرسل لنا رسالة
-            </h2>
-
             {submitStatus === 'success' && (
               <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-6">
                 <p className="text-green-800 font-semibold">
@@ -85,10 +80,7 @@ export default function ContactPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-lg font-semibold text-[#004705] mb-2">
-                    الاسم الكامل *
-                  </label>
+                <div className="relative">
                   <input
                     type="text"
                     id="name"
@@ -96,15 +88,22 @@ export default function ContactPage() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200"
-                    placeholder="أدخل اسمك الكامل"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200 peer placeholder-transparent"
+                    placeholder="الاسم الكامل"
                   />
+                  <label 
+                    htmlFor="name" 
+                    className={`absolute right-4 transition-all duration-200 pointer-events-none ${
+                      formData.name 
+                        ? 'text-sm text-[#004705] -top-2 bg-white px-2' 
+                        : 'text-gray-500 top-3 peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[#004705] peer-focus:bg-white peer-focus:px-2'
+                    }`}
+                  >
+                    الاسم الكامل *
+                  </label>
                 </div>
 
-                <div>
-                  <label htmlFor="email" className="block text-lg font-semibold text-[#004705] mb-2">
-                    البريد الإلكتروني *
-                  </label>
+                <div className="relative">
                   <input
                     type="email"
                     id="email"
@@ -112,32 +111,46 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200"
-                    placeholder="example@email.com"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200 peer placeholder-transparent"
+                    placeholder="البريد الإلكتروني"
                   />
+                  <label 
+                    htmlFor="email" 
+                    className={`absolute right-4 transition-all duration-200 pointer-events-none ${
+                      formData.email 
+                        ? 'text-sm text-[#004705] -top-2 bg-white px-2' 
+                        : 'text-gray-500 top-3 peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[#004705] peer-focus:bg-white peer-focus:px-2'
+                    }`}
+                  >
+                    البريد الإلكتروني *
+                  </label>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="phone" className="block text-lg font-semibold text-[#004705] mb-2">
-                    رقم الهاتف
-                  </label>
+                <div className="relative">
                   <input
                     type="tel"
                     id="phone"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200"
-                    placeholder="+20 123 456 7890"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200 peer placeholder-transparent"
+                    placeholder="رقم الهاتف"
                   />
+                  <label 
+                    htmlFor="phone" 
+                    className={`absolute right-4 transition-all duration-200 pointer-events-none ${
+                      formData.phone 
+                        ? 'text-sm text-[#004705] -top-2 bg-white px-2' 
+                        : 'text-gray-500 top-3 peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[#004705] peer-focus:bg-white peer-focus:px-2'
+                    }`}
+                  >
+                    رقم الهاتف
+                  </label>
                 </div>
 
-                <div>
-                  <label htmlFor="type" className="block text-lg font-semibold text-[#004705] mb-2">
-                    نوع الاستفسار *
-                  </label>
+                <div className="relative">
                   <select
                     id="type"
                     name="type"
@@ -156,10 +169,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="subject" className="block text-lg font-semibold text-[#004705] mb-2">
-                  موضوع الرسالة *
-                </label>
+              <div className="relative">
                 <input
                   type="text"
                   id="subject"
@@ -167,15 +177,22 @@ export default function ContactPage() {
                   value={formData.subject}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200"
-                  placeholder="اكتب موضوع رسالتك"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200 peer placeholder-transparent"
+                  placeholder="موضوع الرسالة"
                 />
+                <label 
+                  htmlFor="subject" 
+                  className={`absolute right-4 transition-all duration-200 pointer-events-none ${
+                    formData.subject 
+                      ? 'text-sm text-[#004705] -top-2 bg-white px-2' 
+                      : 'text-gray-500 top-3 peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[#004705] peer-focus:bg-white peer-focus:px-2'
+                  }`}
+                >
+                  موضوع الرسالة *
+                </label>
               </div>
 
-              <div>
-                <label htmlFor="message" className="block text-lg font-semibold text-[#004705] mb-2">
-                  الرسالة *
-                </label>
+              <div className="relative">
                 <textarea
                   id="message"
                   name="message"
@@ -183,9 +200,19 @@ export default function ContactPage() {
                   onChange={handleInputChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200 resize-vertical"
-                  placeholder="اكتب رسالتك هنا..."
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004705] focus:border-transparent transition-all duration-200 resize-vertical peer placeholder-transparent"
+                  placeholder="الرسالة"
                 ></textarea>
+                <label 
+                  htmlFor="message" 
+                  className={`absolute right-4 transition-all duration-200 pointer-events-none ${
+                    formData.message 
+                      ? 'text-sm text-[#004705] -top-2 bg-white px-2' 
+                      : 'text-gray-500 top-3 peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[#004705] peer-focus:bg-white peer-focus:px-2'
+                  }`}
+                >
+                  الرسالة *
+                </label>
               </div>
 
               <button
@@ -213,105 +240,30 @@ export default function ContactPage() {
           </div>
 
           {/* معلومات الاتصال */}
-          <div className="space-y-8">
-            <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-              <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-                <span className="text-4xl text-[#FF8C00] mr-4">📍</span>
-                معلومات الاتصال
-              </h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4 space-x-reverse">
-                  <div className="text-3xl text-[#FF8C00]">📧</div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-[#004705] mb-2">البريد الإلكتروني</h3>
-                    <p className="text-lg text-gray-700">info@naebak.com</p>
-                    <p className="text-lg text-gray-700">support@naebak.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4 space-x-reverse">
-                  <div className="text-3xl text-[#FF8C00]">📞</div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-[#004705] mb-2">الهاتف</h3>
-                    <p className="text-lg text-gray-700">+20 123 456 7890</p>
-                    <p className="text-lg text-gray-700">+20 987 654 3210</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4 space-x-reverse">
-                  <div className="text-3xl text-[#FF8C00]">🏢</div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-[#004705] mb-2">العنوان</h3>
-                    <p className="text-lg text-gray-700">القاهرة، مصر</p>
-                    <p className="text-lg text-gray-700">مدينة نصر</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4 space-x-reverse">
-                  <div className="text-3xl text-[#FF8C00]">⏰</div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-[#004705] mb-2">ساعات العمل</h3>
-                    <p className="text-lg text-gray-700">الأحد - الخميس: 9:00 ص - 6:00 م</p>
-                    <p className="text-lg text-gray-700">الجمعة - السبت: 10:00 ص - 4:00 م</p>
-                  </div>
-                </div>
+          <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
+            <div className="space-y-8">
+              <div className="text-center border-b border-gray-200 pb-6">
+                <h3 className="text-2xl font-bold text-[#004705] mb-2">البريد الإلكتروني</h3>
+                <p className="text-lg text-gray-700">info@naebak.com</p>
+                <p className="text-lg text-gray-700">support@naebak.com</p>
               </div>
-            </div>
 
-            <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-              <h2 className="text-3xl font-bold text-[#004705] mb-6 flex items-center">
-                <span className="text-4xl text-[#FF8C00] mr-4">🚀</span>
-                الدعم السريع
-              </h2>
-              
-              <div className="space-y-4">
-                <div className="bg-green-50 border-l-4 border-green-400 p-4">
-                  <h3 className="text-xl font-semibold text-green-800 mb-2">المشاكل التقنية</h3>
-                  <p className="text-lg text-green-700">
-                    للحصول على مساعدة فورية في المشاكل التقنية، تواصل معنا عبر البريد الإلكتروني أو الهاتف.
-                  </p>
-                </div>
-
-                <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
-                  <h3 className="text-xl font-semibold text-blue-800 mb-2">الاستفسارات العامة</h3>
-                  <p className="text-lg text-blue-700">
-                    لأي استفسارات حول كيفية استخدام المنصة أو خدماتنا، نحن هنا لمساعدتك.
-                  </p>
-                </div>
-
-                <div className="bg-purple-50 border-l-4 border-purple-400 p-4">
-                  <h3 className="text-xl font-semibold text-purple-800 mb-2">الشراكات والتعاون</h3>
-                  <p className="text-lg text-purple-700">
-                    مهتم بالشراكة معنا؟ تواصل معنا لمناقشة فرص التعاون المختلفة.
-                  </p>
-                </div>
+              <div className="text-center border-b border-gray-200 pb-6">
+                <h3 className="text-2xl font-bold text-[#004705] mb-2">الهاتف</h3>
+                <p className="text-lg text-gray-700">+20 123 456 7890</p>
+                <p className="text-lg text-gray-700">+20 987 654 3210</p>
               </div>
-            </div>
 
-            <div className="bg-[#004705] text-white p-8 rounded-lg shadow-lg">
-              <h2 className="text-3xl font-bold mb-6 flex items-center">
-                <span className="text-4xl text-[#FF8C00] mr-4">💬</span>
-                تابعنا على وسائل التواصل
-              </h2>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <a href="#" className="bg-white bg-opacity-10 hover:bg-opacity-20 p-4 rounded-lg transition-all duration-200 text-center">
-                  <div className="text-2xl mb-2">📘</div>
-                  <p className="font-semibold">فيسبوك</p>
-                </a>
-                <a href="#" className="bg-white bg-opacity-10 hover:bg-opacity-20 p-4 rounded-lg transition-all duration-200 text-center">
-                  <div className="text-2xl mb-2">🐦</div>
-                  <p className="font-semibold">تويتر</p>
-                </a>
-                <a href="#" className="bg-white bg-opacity-10 hover:bg-opacity-20 p-4 rounded-lg transition-all duration-200 text-center">
-                  <div className="text-2xl mb-2">📷</div>
-                  <p className="font-semibold">إنستغرام</p>
-                </a>
-                <a href="#" className="bg-white bg-opacity-10 hover:bg-opacity-20 p-4 rounded-lg transition-all duration-200 text-center">
-                  <div className="text-2xl mb-2">💼</div>
-                  <p className="font-semibold">لينكد إن</p>
-                </a>
+              <div className="text-center border-b border-gray-200 pb-6">
+                <h3 className="text-2xl font-bold text-[#004705] mb-2">العنوان</h3>
+                <p className="text-lg text-gray-700">القاهرة، مصر</p>
+                <p className="text-lg text-gray-700">مدينة نصر</p>
+              </div>
+
+              <div className="text-center">
+                <h3 className="text-2xl font-bold text-[#004705] mb-2">ساعات العمل</h3>
+                <p className="text-lg text-gray-700">الأحد - الخميس: 9:00 ص - 6:00 م</p>
+                <p className="text-lg text-gray-700">الجمعة - السبت: 10:00 ص - 4:00 م</p>
               </div>
             </div>
           </div>
