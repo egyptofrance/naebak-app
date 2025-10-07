@@ -67,7 +67,7 @@ export default function RegisterForm() {
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({ ...prev, [name]: checked }));
-    } else if (name === 'governorateId') {
+    } else if (name === 'governorateId' || name === 'councilId' || name === 'partyId' || name === 'electoralSymbolId') {
       setFormData((prev) => ({ ...prev, [name]: parseInt(value, 10) }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -95,7 +95,12 @@ export default function RegisterForm() {
     }
 
     if (!formData.governorateId || formData.governorateId === 0) {
-      setError('يرجى اختيار المحافظة');
+      setError("يرجى اختيار المحافظة");
+      return;
+    }
+
+    if (!formData.gender) {
+      setError("يرجى اختيار الجنس");
       return;
     }
 
