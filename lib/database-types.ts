@@ -19,15 +19,22 @@ export interface CitizenProfile {
 
 export interface Representative {
   id: string;
+  user_id: string; // Added user_id for linking to authentication system
   full_name: string;
-  position: 'mp' | 'senator'; // Member of Parliament or Senator
+  slug: string; // Unique identifier for URL, e.g., ahmed-mohamed
+  position: 'mp' | 'senator' | 'candidate'; // Member of Parliament, Senator, or Candidate
   governorate: string;
-  district: string;
+  electoral_district: string; // Changed from 'district' to be more specific
+  council_type: 'parliament' | 'senate'; // Type of council they belong to or are running for
   party?: string;
   bio?: string;
   profile_image_url?: string;
+  banner_image_url?: string; // Added for banner image
   contact_email?: string;
   contact_phone?: string;
+  parliamentary_committee?: string; // For current MPs
+  electoral_symbol?: string; // For candidates
+  electoral_number?: string; // For candidates
   rating: number; // Average rating from citizens
   total_ratings: number;
   created_at: string;
@@ -112,6 +119,24 @@ export interface CitizenRegistrationData {
   profileImage?: File;
 }
 
+export interface RepresentativeRegistrationData {
+  fullName: string;
+  slug: string;
+  position: 'mp' | 'senator' | 'candidate';
+  governorate: string;
+  electoralDistrict: string;
+  councilType: 'parliament' | 'senate';
+  party?: string;
+  bio?: string;
+  profileImage?: File;
+  bannerImage?: File;
+  contactEmail?: string;
+  contactPhone?: string;
+  parliamentaryCommittee?: string;
+  electoralSymbol?: string;
+  electoralNumber?: string;
+}
+
 export interface MessageFormData {
   recipientId: string;
   subject: string;
@@ -139,19 +164,22 @@ export interface DatabaseService {
   getCitizenProfile(userId: string): Promise<ApiResponse<CitizenProfile>>;
   
   // Representative Operations
-  getRepresentatives(governorate?: string, district?: string): Promise<ApiResponse<Representative[]>>;
+  createRepresentative(data: RepresentativeRegistrationData): Promise<ApiResponse<Representative>>;
+  updateRepresentative(id: string, data: Partial<Representative>): Promise<ApiResponse<Representative>>;
+  getRepresentatives(governorate?: string, electoralDistrict?: string, position?: Representative['position']): Promise<ApiResponse<Representative[]>>;
   getRepresentativeById(id: string): Promise<ApiResponse<Representative>>;
+  getRepresentativeBySlug(slug: string): Promise<ApiResponse<Representative>>;
   
   // Message Operations
   sendMessage(data: MessageFormData): Promise<ApiResponse<Message>>;
-  getMessages(citizenId: string, page?: number, limit?: number): Promise<ApiResponse<PaginatedResponse<Message>>>;
+  getMessages(userId: string, page?: number, limit?: number): Promise<ApiResponse<PaginatedResponse<Message>>>; // Can be citizen or representative messages
   markMessageAsRead(messageId: string): Promise<ApiResponse<void>>;
   deleteMessage(messageId: string): Promise<ApiResponse<void>>;
   
   // Complaint Operations
   submitComplaint(data: ComplaintFormData): Promise<ApiResponse<Complaint>>;
-  getComplaints(citizenId: string, page?: number, limit?: number): Promise<ApiResponse<PaginatedResponse<Complaint>>>;
-  updateComplaintStatus(complaintId: string, status: Complaint['status']): Promise<ApiResponse<Complaint>>;
+  getComplaints(userId: string, page?: number, limit?: number): Promise<ApiResponse<PaginatedResponse<Complaint>>>; // Can be citizen or representative complaints
+  updateComplaintStatus(complaintId: string, status: Complaint['status'], assignedTo?: string): Promise<ApiResponse<Complaint>>;
   getComplaintHistory(complaintId: string): Promise<ApiResponse<ComplaintHistory[]>>;
   
   // Rating Operations
@@ -199,4 +227,49 @@ export const COMPLAINT_STATUS = [
   { value: 'in_progress', label: 'قيد المعالجة' },
   { value: 'resolved', label: 'تم الحل' },
   { value: 'rejected', label: 'مرفوض' }
+] as const;
+
+export const REPRESENTATIVE_POSITIONS = [
+  { value: 'mp', label: 'عضو مجلس نواب' },
+  { value: 'senator', label: 'عضو مجلس شيوخ' },
+  { value: 'candidate', label: 'مرشح' }
+] as const;
+
+export const COUNCIL_TYPES = [
+  { value: 'parliament', label: 'مجلس النواب' },
+  { value: 'senate', label: 'مجلس الشيوخ' }
+] as const;
+
+export const GENDERS = [
+  { value: 'male', label: 'ذكر' },
+  { value: 'female', label: 'أنثى' }
+] as const;
+
+export const MOCK_PARTIES = [
+  'حزب المستقبل', 'حزب التقدم', 'حزب العدالة', 'حزب الأمة', 'مستقل'
+] as const;
+
+export const MOCK_PARLIAMENTARY_COMMITTEES = [
+  'لجنة الشؤون الدستورية والتشريعية',
+  'لجنة الخطة والموازنة',
+  'لجنة الشؤون الاقتصادية',
+  'لجنة العلاقات الخارجية',
+  'لجنة الدفاع والأمن القومي',
+  'لجنة الشؤون العربية',
+  'لجنة الشؤون الأفريقية',
+  'لجنة الصناعة',
+  'لجنة الطاقة والبيئة',
+  'لجنة الزراعة والري والأمن الغذائي والثروة الحيوانية',
+  'لجنة التعليم والبحث العلمي',
+  'لجنة الشؤون الدينية والأوقاف',
+  'لجنة الصحة',
+  'لجنة القوى العاملة',
+  'لجنة الإسكان والمرافق العامة والتعمير',
+  'لجنة النقل والمواصلات',
+  'لجنة الاتصالات وتكنولوجيا المعلومات',
+  'لجنة الثقافة والإعلام والآثار',
+  'لجنة السياحة والطيران المدني',
+  'لجنة الشباب والرياضة',
+  'لجنة التضامن الاجتماعي والأسرة والأشخاص ذوي الإعاقة',
+  'لجنة المشروعات المتوسطة والصغيرة ومتناهية الصغر'
 ] as const;
