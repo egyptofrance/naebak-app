@@ -79,8 +79,6 @@ export default function RepresentativeDashboard() {
       description: 'انقطاع المياه في منطقة الحي الثالث لأكثر من أسبوع',
       category: 'خدمات عامة',
       priority: 'high',
-
-      status: 'assigned',
       assigned_to: 'rep_1',
       created_at: '2025-01-12T10:00:00Z',
       updated_at: '2025-01-12T10:00:00Z',
