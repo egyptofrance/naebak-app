@@ -19,7 +19,7 @@ export default function AboutPage() {
       <section className="mb-12">
         <h2 className="text-3xl font-semibold text-[#004705] mb-4">مفهوم 
 
-عام: النائب</h2
+عام: النائب</h2>
         <p className="text-lg text-[#333333] leading-relaxed">
           كلمة "النائب" تطلق على أي عضو في مجلس النواب أو مجلس الشيوخ، وكذلك على المرشحين لعضوية هذين المجلسين. عندما نتحدث عن "التواصل مع النواب"، فإننا نجمع بين الأعضاء والمرشحين في مجلسي الشيوخ والنواب.
         </p>
