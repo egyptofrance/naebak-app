@@ -65,9 +65,8 @@ export default function RepresentativeDashboard() {
       recipient_id: 'rep_1',
       subject: 'مقترح لتحسين الخدمات الصحية',
       content: 'أقترح إنشاء مركز صحي جديد في المنطقة...',
-      date: '2025-01-10',
-      status: 'read',
-      created_at: '2025-01-10T10:00:00Z',
+          status: 'read',
+          created_at: '2025-01-10T10:00:00Z',
       updated_at: '2025-01-10T10:00:00Z',
     },
   ]);
