@@ -55,9 +55,8 @@ export default function RepresentativeDashboard() {
       recipient_id: 'rep_1',
       subject: 'استفسار حول مشروع الطرق',
       content: 'أود الاستفسار عن موعد بدء مشروع تطوير الطرق في منطقتنا...',
-      date: '2025-01-15',
-      status: 'sent',
-      created_at: '2025-01-15T10:00:00Z',
+          status: 'sent',
+          created_at: '2025-01-15T10:00:00Z',
       updated_at: '2025-01-15T10:00:00Z',
     },
     {
