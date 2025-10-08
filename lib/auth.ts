@@ -70,24 +70,54 @@ export async function signUpWithEmailAndProfile(formData: {
   district?: string;
   committee?: string;
 }) {
-  // 1. Create user in Supabase Auth
-  const { data: authData, error: authError } = await supabase.auth.signUp({
-    email: formData.email,
-    password: formData.password,
-  });
+  try {
+    // 1. Create user in Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+      options: {
+        data: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          phone: formData.phone,
+          whatsapp: formData.whatsapp,
+          governorate_id: formData.governorateId,
+          city: formData.city,
+          village: formData.village,
+          dob: formData.dob,
+          gender: formData.gender,
+          job_title: formData.jobTitle,
+          account_type: formData.accountType,
+          council_id: formData.councilId,
+          party_id: formData.partyId,
+          is_independent: formData.isIndependent,
+          electoral_symbol_id: formData.electoralSymbolId,
+          electoral_number: formData.electoralNumber,
+          district: formData.district,
+          committee: formData.committee,
+        }
+      }
+    });
 
-  if (authError) {
-    return { user: null, error: authError.message };
+    if (authError) {
+      console.error('Auth error:', authError);
+      return { user: null, error: authError.message };
+    }
+
+    if (!authData.user) {
+      return { user: null, error: 'فشل في إنشاء الحساب' };
+    }
+
+    return { 
+      user: authData.user, 
+      error: null,
+      message: 'تم إنشاء الحساب بنجاح. يرجى التحقق من بريدك الإلكتروني لتفعيل الحساب.'
+    };
+  } catch (error) {
+    console.error('Signup error:', error);
+    return { 
+      user: null, 
+      error: 'حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.' 
+    };
   }
-
-  if (!authData.user) {
-    return { user: null, error: 'فشل في إنشاء الحساب' };
-  }
-
-  // For now, return success - full implementation would require admin client
-  return { 
-    user: authData.user, 
-    error: null,
-    message: 'تم إنشاء الحساب بنجاح. يرجى التحقق من بريدك الإلكتروني لتفعيل الحساب.'
-  };
 }
