@@ -5,8 +5,18 @@ import { useRouter } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import CitizenDashboard from '@/components/dashboards/CitizenDashboard';
 
+interface User {
+  id: string;
+  email: string;
+  user_metadata: {
+    first_name?: string;
+    last_name?: string;
+    account_type?: string;
+  };
+}
+
 export default function DashboardPage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
