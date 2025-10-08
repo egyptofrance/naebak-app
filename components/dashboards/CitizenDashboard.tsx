@@ -5,7 +5,7 @@ import { getCurrentUser } from '@/lib/auth';
 
 interface User {
   id: string;
-  email: string;
+  email?: string;
   user_metadata: {
     first_name?: string;
     last_name?: string;

@@ -9,7 +9,7 @@ import VisitorCounter from '../ui/VisitorCounter';
 
 interface User {
   id: string;
-  email: string;
+  email?: string;
   user_metadata: {
     first_name?: string;
     last_name?: string;
@@ -55,7 +55,7 @@ export default function Header() {
     if (!user) return '';
     const firstName = user.user_metadata?.first_name || '';
     const lastName = user.user_metadata?.last_name || '';
-    return `${firstName} ${lastName}`.trim() || user.email;
+    return `${firstName} ${lastName}`.trim() || user.email || 'مستخدم';
   };
 
   const getAccountTypeLabel = () => {

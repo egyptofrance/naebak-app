@@ -7,7 +7,7 @@ import CitizenDashboard from '@/components/dashboards/CitizenDashboard';
 
 interface User {
   id: string;
-  email: string;
+  email?: string;
   user_metadata: {
     first_name?: string;
     last_name?: string;
