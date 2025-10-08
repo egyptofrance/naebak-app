@@ -48,26 +48,22 @@ export default function RepresentativeDashboard() {
     electoralNumber: '',
   });
 
-  const [messages] = useState<Message[]>([
+  const [messages] = useState<any[]>([
     {
-      id: 'msg_rep_1',
-      sender_id: 'citizen_1',
-      recipient_id: 'rep_1',
+      id: 1,
+      recipient: 'أحمد محمد',
       subject: 'استفسار حول مشروع الطرق',
       content: 'أود الاستفسار عن موعد بدء مشروع تطوير الطرق في منطقتنا...',
-          status: 'sent',
-          created_at: '2025-01-15T10:00:00Z',
-          updated_at: '2025-01-15T10:00:00Z',
+      date: '2025-01-15',
+      status: 'sent',
     },
     {
-      id: 'msg_rep_2',
-      sender_id: 'citizen_2',
-      recipient_id: 'rep_1',
+      id: 2,
+      recipient: 'فاطمة أحمد',
       subject: 'مقترح لتحسين الخدمات الصحية',
       content: 'أقترح إنشاء مركز صحي جديد في المنطقة...',
-          status: 'read',
-          created_at: '2025-01-10T10:00:00Z',
-          updated_at: '2025-01-10T10:00:00Z',
+      date: '2025-01-10',
+      status: 'read',
     },
   ]);
 
