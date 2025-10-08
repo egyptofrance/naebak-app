@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import CitizenDashboard from '@/components/dashboards/CitizenDashboard';
+import CandidateDashboard from '@/components/dashboards/CandidateDashboard';
+import MPDashboard from '@/components/dashboards/MPDashboard';
+import AdminDashboard from '@/components/dashboards/AdminDashboard';
 
 interface User {
   id: string;

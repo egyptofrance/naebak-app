@@ -56,7 +56,7 @@ export async function signOut() {
   }
 }
 
-// تسجيل حساب جديد مع إنشاء ملف شخصي
+// تسجيل حساب جديد مع إنشاء ملف شخصي - طبقاً لقاعدة البيانات الحقيقية
 export async function signUpWithEmailAndProfile(userData: {
   email: string;
   password: string;
@@ -66,15 +66,12 @@ export async function signUpWithEmailAndProfile(userData: {
   accountType: string;
   gender: string;
   birthDate: string;
-  nationalId: string;
   governorateId: number;
-  address: string;
+  city?: string;
+  village?: string;
   councilId?: number | null;
   partyId?: number | null;
-  biography?: string;
-  education?: string;
-  experience?: string;
-  promises?: string;
+  district?: string;
 }) {
   try {
     // إنشاء الحساب في Supabase Auth
@@ -102,35 +99,53 @@ export async function signUpWithEmailAndProfile(userData: {
       throw new Error('نوع الحساب غير صحيح');
     }
 
-    // إنشاء الملف الشخصي في جدول profiles
-    const { error: profileError } = await supabase
-      .from('profiles')
+    // إنشاء المستخدم في جدول users - طبقاً للمخطط الحقيقي
+    const { data: userRecord, error: userError } = await supabase
+      .from('users')
       .insert({
-        id: authData.user.id,
+        auth_id: authData.user.id,
+        role_id: roleData.id,
         first_name: userData.firstName,
         last_name: userData.lastName,
+        email: userData.email,
         phone: userData.phone,
         gender: userData.gender,
-        birth_date: userData.birthDate,
-        national_id: userData.nationalId,
+        dob: userData.birthDate, // dob في قاعدة البيانات
         governorate_id: userData.governorateId,
-        address: userData.address,
-        role_id: roleData.id,
-        council_id: userData.councilId,
-        party_id: userData.partyId,
-        biography: userData.biography,
-        education: userData.education,
-        experience: userData.experience,
-        promises: userData.promises,
-        is_approved: userData.accountType === 'citizen' ? true : false, // المواطنون يتم قبولهم تلقائياً
+        city: userData.city || null,
+        village: userData.village || null,
+        total_points: 0,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      });
+      })
+      .select()
+      .single();
 
-    if (profileError) {
-      // إذا فشل إنشاء الملف الشخصي، احذف المستخدم من Auth
+    if (userError) {
+      // إذا فشل إنشاء المستخدم، احذف المستخدم من Auth
       await supabase.auth.admin.deleteUser(authData.user.id);
-      throw new Error('فشل في إنشاء الملف الشخصي: ' + profileError.message);
+      throw new Error('فشل في إنشاء المستخدم: ' + userError.message);
+    }
+
+    // إذا كان المستخدم مرشح أو نائب، أنشئ ملف في جدول profiles
+    if (userData.accountType === 'candidate' || userData.accountType === 'mp') {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          user_id: userRecord.id,
+          council_id: userData.councilId || null,
+          party_id: userData.partyId || null,
+          district: userData.district || null,
+          is_independent: userData.partyId === 1, // إذا كان الحزب "مستقل"
+          created_at: new Date().toISOString()
+        });
+
+      if (profileError) {
+        // إذا فشل إنشاء الملف الشخصي، احذف المستخدم
+        await supabase.from('users').delete().eq('id', userRecord.id);
+        await supabase.auth.admin.deleteUser(authData.user.id);
+        throw new Error('فشل في إنشاء الملف الشخصي: ' + profileError.message);
+      }
     }
 
     return { success: true, user: authData.user };
@@ -151,5 +166,36 @@ export async function getCurrentUser() {
     return user;
   } catch (error) {
     return null;
+  }
+}
+
+// الحصول على بيانات المستخدم الكاملة من جدول users
+export async function getUserProfile(authId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select(`
+        *,
+        roles(name),
+        governorates(name),
+        profiles(
+          council_id,
+          party_id,
+          district,
+          is_independent,
+          councils(name),
+          parties(name)
+        )
+      `)
+      .eq('auth_id', authId)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return { success: true, data };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 }

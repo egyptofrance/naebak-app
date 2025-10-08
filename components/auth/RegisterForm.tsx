@@ -37,7 +37,7 @@ export default function RegisterForm() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [parties, setParties] = useState<Party[]>([]);
   
-  // بيانات النموذج
+  // بيانات النموذج - طبقاً لجدول users في قاعدة البيانات
   const [formData, setFormData] = useState({
     // البيانات الأساسية
     firstName: '',
@@ -50,20 +50,17 @@ export default function RegisterForm() {
     // نوع الحساب
     accountType: '',
     
-    // البيانات الشخصية
+    // البيانات الشخصية - طبقاً لجدول users
     gender: '',
-    birthDate: '',
-    nationalId: '',
-    governorateId: '',
-    address: '',
+    birthDate: '', // dob في قاعدة البيانات
+    governorateId: '', // governorate_id في قاعدة البيانات
+    city: '', // city في قاعدة البيانات
+    village: '', // village في قاعدة البيانات
     
-    // بيانات المرشح/النائب
+    // بيانات المرشح/النائب - طبقاً لجدول profiles
     councilId: '',
     partyId: '',
-    biography: '',
-    education: '',
-    experience: '',
-    promises: '',
+    district: '', // district في جدول profiles
     
     // الموافقة على الشروط
     agreeToTerms: false
@@ -131,32 +128,17 @@ export default function RegisterForm() {
   };
 
   const validateStep = (step: number): boolean => {
-    console.log('Validating step:', step, 'FormData:', formData);
-    
     switch (step) {
       case 1:
-        const step1Valid = !!(formData.firstName && formData.lastName && formData.email && 
+        return !!(formData.firstName && formData.lastName && formData.email && 
                  formData.password && formData.confirmPassword && formData.phone);
-        console.log('Step 1 validation:', step1Valid);
-        return step1Valid;
       case 2:
-        const step2Valid = !!formData.accountType;
-        console.log('Step 2 validation:', step2Valid, 'accountType:', formData.accountType);
-        return step2Valid;
+        return !!formData.accountType;
       case 3:
-        const step3Valid = !!(formData.gender && formData.birthDate && formData.nationalId && 
-                 formData.governorateId && formData.address);
-        console.log('Step 3 validation:', step3Valid, {
-          gender: formData.gender,
-          birthDate: formData.birthDate,
-          nationalId: formData.nationalId,
-          governorateId: formData.governorateId,
-          address: formData.address
-        });
-        return step3Valid;
+        return !!(formData.gender && formData.birthDate && formData.governorateId);
       case 4:
         if (formData.accountType === 'candidate' || formData.accountType === 'mp') {
-          return !!(formData.councilId && formData.partyId && formData.biography);
+          return !!(formData.councilId && formData.partyId && formData.agreeToTerms);
         }
         return formData.agreeToTerms;
       default:
@@ -204,15 +186,12 @@ export default function RegisterForm() {
         accountType: formData.accountType,
         gender: formData.gender,
         birthDate: formData.birthDate,
-        nationalId: formData.nationalId,
         governorateId: parseInt(formData.governorateId),
-        address: formData.address,
+        city: formData.city,
+        village: formData.village,
         councilId: formData.councilId ? parseInt(formData.councilId) : null,
         partyId: formData.partyId ? parseInt(formData.partyId) : null,
-        biography: formData.biography,
-        education: formData.education,
-        experience: formData.experience,
-        promises: formData.promises
+        district: formData.district
       });
 
       if (result.success) {
@@ -250,7 +229,7 @@ export default function RegisterForm() {
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-red-600 text-white p-6">
+        <div className="bg-gradient-to-r from-green-600 to-green-600 text-white p-6">
           <h2 className="text-3xl font-bold text-center mb-4">إنشاء حساب جديد</h2>
           <p className="text-center opacity-90">انضم إلى منصة نائبك</p>
           
@@ -453,8 +432,8 @@ export default function RegisterForm() {
                       required
                     >
                       <option value="">اختر الجنس</option>
-                      <option value="male">ذكر</option>
-                      <option value="female">أنثى</option>
+                      <option value="ذكر">ذكر</option>
+                      <option value="أنثى">أنثى</option>
                     </select>
                   </div>
                   
@@ -475,21 +454,6 @@ export default function RegisterForm() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    الرقم القومي *
-                  </label>
-                  <input
-                    type="text"
-                    name="nationalId"
-                    value={formData.nationalId}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="أدخل الرقم القومي"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     المحافظة *
                   </label>
                   <select
@@ -501,26 +465,41 @@ export default function RegisterForm() {
                   >
                     <option value="">اختر المحافظة</option>
                     {governorates.map((gov) => (
-                      <option key={gov.id} value={gov.id}>
+                      <option key={gov.id} value={String(gov.id)}>
                         {gov.name}
                       </option>
                     ))}
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    العنوان *
-                  </label>
-                  <textarea
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="أدخل العنوان التفصيلي"
-                    required
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      المدينة
+                    </label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="أدخل المدينة"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      القرية/الحي
+                    </label>
+                    <input
+                      type="text"
+                      name="village"
+                      value={formData.village}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="أدخل القرية أو الحي"
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -544,7 +523,7 @@ export default function RegisterForm() {
                         >
                           <option value="">اختر المجلس</option>
                           {councils.map((council) => (
-                            <option key={council.id} value={council.id}>
+                            <option key={council.id} value={String(council.id)}>
                               {council.name}
                             </option>
                           ))}
@@ -564,7 +543,7 @@ export default function RegisterForm() {
                         >
                           <option value="">اختر الحزب</option>
                           {parties.map((party) => (
-                            <option key={party.id} value={party.id}>
+                            <option key={party.id} value={String(party.id)}>
                               {party.name}
                             </option>
                           ))}
@@ -574,58 +553,15 @@ export default function RegisterForm() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        السيرة الذاتية *
+                        الدائرة الانتخابية
                       </label>
-                      <textarea
-                        name="biography"
-                        value={formData.biography}
+                      <input
+                        type="text"
+                        name="district"
+                        value={formData.district}
                         onChange={handleInputChange}
-                        rows={4}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="اكتب نبذة عن سيرتك الذاتية"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        المؤهلات التعليمية
-                      </label>
-                      <textarea
-                        name="education"
-                        value={formData.education}
-                        onChange={handleInputChange}
-                        rows={3}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="اذكر مؤهلاتك التعليمية"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        الخبرات المهنية
-                      </label>
-                      <textarea
-                        name="experience"
-                        value={formData.experience}
-                        onChange={handleInputChange}
-                        rows={3}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="اذكر خبراتك المهنية"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        الوعود الانتخابية
-                      </label>
-                      <textarea
-                        name="promises"
-                        value={formData.promises}
-                        onChange={handleInputChange}
-                        rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="اذكر وعودك للناخبين"
+                        placeholder="أدخل الدائرة الانتخابية"
                       />
                     </div>
                   </>
