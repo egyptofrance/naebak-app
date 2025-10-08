@@ -131,15 +131,29 @@ export default function RegisterForm() {
   };
 
   const validateStep = (step: number): boolean => {
+    console.log('Validating step:', step, 'FormData:', formData);
+    
     switch (step) {
       case 1:
-        return !!(formData.firstName && formData.lastName && formData.email && 
+        const step1Valid = !!(formData.firstName && formData.lastName && formData.email && 
                  formData.password && formData.confirmPassword && formData.phone);
+        console.log('Step 1 validation:', step1Valid);
+        return step1Valid;
       case 2:
-        return !!formData.accountType;
+        const step2Valid = !!formData.accountType;
+        console.log('Step 2 validation:', step2Valid, 'accountType:', formData.accountType);
+        return step2Valid;
       case 3:
-        return !!(formData.gender && formData.birthDate && formData.nationalId && 
+        const step3Valid = !!(formData.gender && formData.birthDate && formData.nationalId && 
                  formData.governorateId && formData.address);
+        console.log('Step 3 validation:', step3Valid, {
+          gender: formData.gender,
+          birthDate: formData.birthDate,
+          nationalId: formData.nationalId,
+          governorateId: formData.governorateId,
+          address: formData.address
+        });
+        return step3Valid;
       case 4:
         if (formData.accountType === 'candidate' || formData.accountType === 'mp') {
           return !!(formData.councilId && formData.partyId && formData.biography);
