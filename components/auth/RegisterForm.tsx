@@ -181,7 +181,7 @@ export default function RegisterForm() {
     setError('');
 
     try {
-      await signUpWithEmailAndProfile({
+      const result = await signUpWithEmailAndProfile({
         email: formData.email,
         password: formData.password,
         firstName: formData.firstName,
@@ -201,7 +201,11 @@ export default function RegisterForm() {
         promises: formData.promises
       });
 
-      router.push('/dashboard');
+      if (result.success) {
+        router.push('/dashboard');
+      } else {
+        setError(result.error || 'حدث خطأ في إنشاء الحساب');
+      }
     } catch (error: any) {
       setError(error.message || 'حدث خطأ في إنشاء الحساب');
     } finally {
@@ -229,7 +233,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-red-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-600 to-red-600 text-white p-6">
