@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Tajawal } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
+import DynamicHeader from "@/components/layout/DynamicHeader";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 import Footer from "@/components/layout/Footer";
 import { getNewsItems, getNewsSettings } from "@/lib/news";
 import LayoutWrapperSuspense from "@/components/layout/LayoutWrapperSuspense"; // Suspense wrapper for client component
@@ -56,19 +57,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${tajawal.className} antialiased`}
       >
-        <LoadingLayout
-          header={<Header />}
-          footer={<Footer />}
-          minLoadingTime={800}
-        >
-          <LayoutWrapperSuspense
-            newsItems={newsItems}
-            newsDirection={direction as "ltr" | "rtl"}
-            newsSpeedSeconds={speedSeconds}
+        <AuthProvider>
+          <LoadingLayout
+            header={<DynamicHeader />}
+            footer={<Footer />}
+            minLoadingTime={800}
           >
-            {children}
-          </LayoutWrapperSuspense>
-        </LoadingLayout>
+            <LayoutWrapperSuspense
+              newsItems={newsItems}
+              newsDirection={direction as "ltr" | "rtl"}
+              newsSpeedSeconds={speedSeconds}
+            >
+              {children}
+            </LayoutWrapperSuspense>
+          </LoadingLayout>
+        </AuthProvider>
       </body>
     </html>
   );
