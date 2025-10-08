@@ -65,8 +65,7 @@ export async function middleware(req: NextRequest) {
   // Public routes that don't require authentication
   const publicRoutes = [
     '/',
-    '/login',
-    '/register',
+
     '/forgot-password',
     '/reset-password',
     '/auth/callback',

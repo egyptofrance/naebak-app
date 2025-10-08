@@ -28,8 +28,7 @@ export default function DashboardPage() {
       const currentUser = await getCurrentUser();
       
       if (!currentUser) {
-        router.push('/login');
-        return;
+
       }
 
       setUser(currentUser);
