@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفعيل حسابك - منصة نائبك</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            direction: rtl;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #004705 0%, #006b07 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .logo {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .header-subtitle {
+            color: #e8f5e8;
+            font-size: 16px;
+            margin: 0;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .welcome-title {
+            color: #004705;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .message {
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .activation-button {
+            display: block;
+            width: 280px;
+            margin: 30px auto;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #004705 0%, #006b07 100%);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 71, 5, 0.3);
+            transition: all 0.3s ease;
+        }
+        .activation-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 71, 5, 0.4);
+        }
+        .alternative-link {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        .alternative-link p {
+            margin: 0 0 10px 0;
+            color: #666666;
+            font-size: 14px;
+        }
+        .alternative-link a {
+            color: #004705;
+            word-break: break-all;
+            font-size: 12px;
+        }
+        .features {
+            background-color: #f8fffe;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .features h3 {
+            color: #004705;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .feature-list li {
+            color: #333333;
+            font-size: 14px;
+            margin-bottom: 8px;
+            padding-right: 20px;
+            position: relative;
+        }
+        .feature-list li:before {
+            content: "✓";
+            color: #004705;
+            font-weight: bold;
+            position: absolute;
+            right: 0;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+        }
+        .footer-logo {
+            color: #004705;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .footer-text {
+            color: #666666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #004705;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .copyright {
+            color: #999999;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        .security-notice {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .security-notice p {
+            margin: 0;
+            color: #856404;
+            font-size: 13px;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+            }
+            .header, .content, .footer {
+                padding: 20px !important;
+            }
+            .activation-button {
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">نائبك.com</div>
+            <p class="header-subtitle">منصة التواصل مع النواب والمرشحين</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h1 class="welcome-title">مرحباً بك في منصة نائبك! 🎉</h1>
+            
+            <div class="message">
+                <p>شكراً لك على انضمامك إلى منصة نائبك، المنصة الرائدة للتواصل بين المواطنين ونوابهم ومرشحيهم في مصر.</p>
+                
+                <p>لإكمال عملية التسجيل وتفعيل حسابك، يرجى النقر على الزر أدناه:</p>
+            </div>
+
+            <a href="{{ .ConfirmationURL }}" class="activation-button">
+                تفعيل الحساب الآن
+            </a>
+
+            <div class="alternative-link">
+                <p><strong>لا يمكنك النقر على الزر؟</strong></p>
+                <p>انسخ الرابط التالي والصقه في متصفحك:</p>
+                <a href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+            </div>
+
+            <div class="features">
+                <h3>ما يمكنك فعله بعد التفعيل:</h3>
+                <ul class="feature-list">
+                    <li>التواصل المباشر مع نوابك ومرشحيك</li>
+                    <li>تقديم الشكاوى والاقتراحات</li>
+                    <li>متابعة أخبار دائرتك الانتخابية</li>
+                    <li>المشاركة في الاستطلاعات والنقاشات</li>
+                    <li>الحصول على تحديثات فورية</li>
+                </ul>
+            </div>
+
+            <div class="security-notice">
+                <p><strong>ملاحظة أمنية:</strong> هذا الرابط صالح لمدة 24 ساعة فقط. إذا لم تقم بتفعيل حسابك خلال هذه المدة، ستحتاج لطلب رابط تفعيل جديد.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">نائبك.com</div>
+            <p class="footer-text">
+                منصة نائبك هي المنصة الرسمية للتواصل بين المواطنين المصريين ونوابهم في مجلسي النواب والشيوخ.
+            </p>
+            
+            <div class="social-links">
+                <a href="https://www.naebak.com">الموقع الرسمي</a>
+                <a href="https://www.naebak.com/about">من نحن</a>
+                <a href="https://www.naebak.com/contact">اتصل بنا</a>
+            </div>
+            
+            <p class="copyright">
+                © 2025 منصة نائبك. جميع الحقوق محفوظة.<br>
+                جمهورية مصر العربية
+            </p>
+        </div>
+    </div>
+</body>
+</html>
