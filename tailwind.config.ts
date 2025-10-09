@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: '#0c6303',    // أخضر
-        secondary: '#ffa516',  // برتقالي
+        secondary: '#ff7d2b',  // برتقالي
         gray: {
           dark: '#333333',     // رمادي داكن
           light: '#f5f5f5',    // رمادي فاتح

@@ -190,7 +190,7 @@ export default function Header() {
                     </Link>
                     <Link
                       href="/auth/register"
-                      className="bg-[#ffa516] text-white px-4 py-2 rounded-lg hover:bg-[#e6941a] transition-colors"
+                      className="bg-[#ff7d2b] text-white px-4 py-2 rounded-lg hover:bg-[#e66a1f] transition-colors"
                     >
                       تسجيل
                     </Link>

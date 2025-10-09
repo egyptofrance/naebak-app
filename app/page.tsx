@@ -1,6 +1,9 @@
+import SimpleBanner from '@/components/layout/SimpleBanner';
+
 export default function Home() {
   return (
     <div className="min-h-screen">
+      <SimpleBanner pageType="landing" />
       <main className="container mx-auto px-4 py-12">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-[#0c6303] mb-4">
