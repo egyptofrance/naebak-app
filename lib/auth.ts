@@ -27,7 +27,27 @@ export async function signIn(email: string, password: string) {
       }
     }
 
-    return { success: true, user: data.user };
+    if (data.user) {
+      // فحص نوع المستخدم من قاعدة البيانات
+      const { data: userData, error: userError } = await supabase        .from(\'user_profiles\')        .select('user_type, account_status, is_profile_complete')
+        .eq('id', data.user.id)
+        .single();
+
+      if (userError) {
+        console.error('Error fetching user data:', userError);
+        return { success: false, error: 'حدث خطأ أثناء جلب بيانات المستخدم' };
+      }
+
+      return { 
+        success: true, 
+        user: data.user,
+        userData: userData,
+        needsUserTypeSelection: !userData.user_type,
+        needsApproval: userData.user_type && userData.account_status === 'pending'
+      };
+    }
+
+    return { success: false, error: 'فشل في تسجيل الدخول' };
   } catch (error) {
     return { success: false, error: 'حدث خطأ أثناء تسجيل الدخول' };
   }
