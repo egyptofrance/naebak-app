@@ -46,13 +46,13 @@ export default function RegistrationWizard() {
     
     if (currentStep === 1) {
       if (stepData.needsEmailConfirmation) {
-        setSuccess('تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق من بريدك الإلكتروني قبل المتابعة.');
-        // إذا كان المستخدم يحتاج تأكيد البريد، انتظر قليلاً ثم انتقل للخطوة التالية
-        setTimeout(() => {
-          setCurrentStep(2);
-        }, 2000);
+        setSuccess('تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى تأكيد بريدك الإلكتروني أولاً، ثم العودة لإكمال التسجيل.');
+        // لا ننتقل للخطوة التالية - ننتظر تأكيد البريد
+        // المستخدم سيعود عبر callback page
+        return;
       } else {
         // إذا كان لديه session صالحة، انتقل مباشرة للخطوة التالية
+        setSuccess('تم إنشاء حسابك بنجاح! الآن أكمل بياناتك الشخصية.');
         setCurrentStep(2);
       }
     } else if (currentStep === 2) {
