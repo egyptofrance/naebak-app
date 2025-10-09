@@ -23,6 +23,7 @@ export async function signIn(email: string, password: string) {
 // تسجيل حساب جديد
 export async function signUp(email: string, password: string, userData: any) {
   try {
+    // إنشاء حساب جديد
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -36,8 +37,9 @@ export async function signUp(email: string, password: string, userData: any) {
       return { success: false, error: error.message };
     }
 
-    // إنشاء سجل المستخدم في جدول users إذا تم إنشاء المستخدم بنجاح
+    // إذا تم إنشاء المستخدم بنجاح
     if (data.user) {
+      // إنشاء سجل المستخدم في جدول users
       try {
         const { error: userError } = await supabase
           .from('users')
@@ -48,22 +50,36 @@ export async function signUp(email: string, password: string, userData: any) {
             updated_at: new Date().toISOString()
           });
 
-        if (userError) {
+        if (userError && userError.code !== '23505') { // 23505 = unique violation (user already exists)
           console.warn('Failed to create user record:', userError);
         }
       } catch (insertError) {
         console.warn('Error creating user record:', insertError);
       }
+
+      // إذا لم يكن هناك session (يحتاج email confirmation)
+      if (!data.session) {
+        return { 
+          success: true, 
+          user: data.user,
+          session: null,
+          needsEmailConfirmation: true
+        };
+      }
+
+      // إذا كان هناك session (تم تسجيل الدخول تلقائياً)
+      return { 
+        success: true, 
+        user: data.user,
+        session: data.session,
+        needsEmailConfirmation: false
+      };
     }
 
-    return { 
-      success: true, 
-      user: data.user,
-      session: data.session,
-      needsEmailConfirmation: !data.session // إذا لم يكن هناك session، فالمستخدم يحتاج تأكيد البريد
-    };
-  } catch (error) {
-    return { success: false, error: 'حدث خطأ أثناء إنشاء الحساب' };
+    return { success: false, error: 'فشل في إنشاء المستخدم' };
+  } catch (error: any) {
+    console.error('SignUp error:', error);
+    return { success: false, error: error.message || 'حدث خطأ أثناء إنشاء الحساب' };
   }
 }
 
@@ -334,28 +350,35 @@ export async function completeProfile(data: any): Promise<{success: boolean, err
   try {
     const supabase = createClient();
     
-    // Get current user
+    // Get current user and session
     const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    
+    console.log('CompleteProfile - User:', user?.id, 'Session:', !!session);
     
     if (userError) {
       console.error('Auth error:', userError);
       return { success: false, error: 'خطأ في التحقق من المصادقة: ' + userError.message };
     }
     
-    if (!user) {
-      return { success: false, error: 'المستخدم غير مسجل الدخول. يرجى تسجيل الدخول أولاً.' };
-    }
-
-    // Get session separately
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    
     if (sessionError) {
       console.error('Session error:', sessionError);
       return { success: false, error: 'خطأ في جلسة المستخدم: ' + sessionError.message };
     }
+    
+    if (!user) {
+      return { success: false, error: 'المستخدم غير مسجل الدخول. يرجى تسجيل الدخول أولاً.' };
+    }
 
     if (!session) {
-      return { success: false, error: 'جلسة المستخدم منتهية الصلاحية. يرجى تسجيل الدخول مرة أخرى.' };
+      // محاولة إعادة تحديث الجلسة
+      const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+      
+      if (refreshError || !refreshData.session) {
+        return { success: false, error: 'جلسة المستخدم منتهية الصلاحية. يرجى تسجيل الدخول مرة أخرى.' };
+      }
+      
+      console.log('Session refreshed successfully');
     }
 
     console.log('Updating profile for user:', user.id);
