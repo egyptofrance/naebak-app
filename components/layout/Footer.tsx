@@ -82,9 +82,12 @@ export default function Footer() {
         </div>
 
         {/* Copyright - Center on large screens, middle on small screens */}
-        <p className="text-sm mb-4 md:mb-0 md:order-2 md:flex-grow md:text-center">
-          © {new Date().getFullYear()} نائبك.com - جميع الحقوق محفوظة
-        </p>
+        <div className="text-sm mb-4 md:mb-0 md:order-2 md:flex-grow md:text-center">
+          <p>© {new Date().getFullYear()} نائبك.com - جميع الحقوق محفوظة</p>
+          <p className="text-xs opacity-75 mt-1">
+            آخر نشر: 2025-10-09 06:16 | Commit: 80df594
+          </p>
+        </div>
 
         {/* Social Icons - Right on large screens, bottom on small screens */}
         <div className="flex space-x-4 md:order-3">
