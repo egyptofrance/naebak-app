@@ -16,10 +16,15 @@ export default function Header() {
 
   const handleSignOut = async () => {
     try {
-      await signOut();
-      router.push('/');
+      const result = await signOut();
+      if (result.success) {
+        router.push('/');
+        router.refresh();
+      } else {
+        console.error('Error signing out:', result.error);
+      }
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Unexpected error signing out:', error);
     }
   };
 
