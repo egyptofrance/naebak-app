@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import MPCard from '@/components/mps/MPCard';
 import MPFilters from '@/components/mps/MPFilters';
-import Banner from '@/components/layout/Banner';
+
 
 interface MP {
   id: string;
@@ -174,9 +174,6 @@ export default function MPsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Banner */}
-      <Banner pageType="mps" />
-
       <div className="container mx-auto px-4 py-8">
         {/* Page Title */}
         <div className="text-center mb-8">

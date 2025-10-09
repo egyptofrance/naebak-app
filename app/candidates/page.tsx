@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import CandidateCard from '@/components/candidates/CandidateCard';
 import CandidateFilters from '@/components/candidates/CandidateFilters';
-import Banner from '@/components/layout/Banner';
+
 
 interface Candidate {
   id: string;
@@ -197,9 +197,6 @@ export default function CandidatesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Banner */}
-      <Banner pageType="candidates" />
-
       <div className="container mx-auto px-4 py-8">
         {/* Page Title */}
         <div className="text-center mb-8">
