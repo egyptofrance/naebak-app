@@ -23,8 +23,14 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
 
   // فحص ما إذا كان المستخدم مسجل دخول بالفعل
   useEffect(() => {
+    console.log('LoginForm useEffect triggered');
+    console.log('authLoading:', authLoading);
+    console.log('user:', user);
+    console.log('user exists:', !!user);
+    
     if (!authLoading && user) {
-      console.log('User already logged in, checking redirect logic...');
+      console.log('✅ User already logged in, checking redirect logic...');
+      console.log('User full object:', user);
       console.log('User metadata:', user.user_metadata);
       
       const accountType = user.user_metadata?.account_type;
@@ -32,24 +38,35 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
       
       console.log('Account type:', accountType);
       console.log('Profile completed:', profileCompleted);
+      console.log('Account type is null/undefined:', !accountType);
       
       // فحص ما إذا كان المستخدم يحتاج لتحديد نوع الحساب
       if (!accountType) {
-        console.log('User needs account setup, redirecting...');
-        router.push('/auth/account-setup');
+        console.log('🔄 User needs account setup, redirecting to /auth/account-setup...');
+        setTimeout(() => {
+          router.push('/auth/account-setup');
+        }, 100);
         return;
       }
       
       // فحص ما إذا كان المستخدم يحتاج لإكمال الملف الشخصي
       if (accountType && !profileCompleted) {
-        console.log('User needs profile completion, redirecting...');
-        router.push('/auth/profile-completion');
+        console.log('🔄 User needs profile completion, redirecting to /auth/profile-completion...');
+        setTimeout(() => {
+          router.push('/auth/profile-completion');
+        }, 100);
         return;
       }
       
       // إذا كان كل شيء جاهز، توجيه للصفحة المطلوبة أو لوحة التحكم
-      console.log('User is fully set up, redirecting to dashboard...');
-      router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
+      console.log('🔄 User is fully set up, redirecting to dashboard...');
+      setTimeout(() => {
+        router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
+      }, 100);
+    } else {
+      console.log('❌ User not logged in or still loading');
+      console.log('authLoading:', authLoading);
+      console.log('user:', user);
     }
   }, [user, authLoading, router, redirectTo]);
 
@@ -63,11 +80,26 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
 
   // إذا كان المستخدم مسجل دخول بالفعل، لا نعرض النموذج
   if (!authLoading && user) {
+    console.log('🔄 Showing redirect loading state...');
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#004705] mx-auto mb-4"></div>
           <p className="text-gray-600">جاري التوجيه...</p>
+          <p className="text-sm text-gray-500 mt-2">المستخدم: {user.email}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // إذا كان ما زال يحمل، اعرض حالة التحميل
+  if (authLoading) {
+    console.log('🔄 Still loading auth state...');
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#004705] mx-auto mb-4"></div>
+          <p className="text-gray-600">جاري التحقق من حالة تسجيل الدخول...</p>
         </div>
       </div>
     );
