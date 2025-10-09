@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock, LogIn, AlertCircle } from 'lucide-react';
 import { loginSchema, type LoginData } from '@/lib/validations/auth';
 import { signIn } from '@/lib/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 interface LoginFormProps {
   redirectTo?: string;
@@ -18,6 +19,39 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+  const { user, isLoading: authLoading } = useAuth();
+
+  // فحص ما إذا كان المستخدم مسجل دخول بالفعل
+  useEffect(() => {
+    if (!authLoading && user) {
+      console.log('User already logged in, checking redirect logic...');
+      console.log('User metadata:', user.user_metadata);
+      
+      const accountType = user.user_metadata?.account_type;
+      const profileCompleted = user.user_metadata?.profile_completed;
+      
+      console.log('Account type:', accountType);
+      console.log('Profile completed:', profileCompleted);
+      
+      // فحص ما إذا كان المستخدم يحتاج لتحديد نوع الحساب
+      if (!accountType) {
+        console.log('User needs account setup, redirecting...');
+        router.push('/auth/account-setup');
+        return;
+      }
+      
+      // فحص ما إذا كان المستخدم يحتاج لإكمال الملف الشخصي
+      if (accountType && !profileCompleted) {
+        console.log('User needs profile completion, redirecting...');
+        router.push('/auth/profile-completion');
+        return;
+      }
+      
+      // إذا كان كل شيء جاهز، توجيه للصفحة المطلوبة أو لوحة التحكم
+      console.log('User is fully set up, redirecting to dashboard...');
+      router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
+    }
+  }, [user, authLoading, router, redirectTo]);
 
   const {
     register,
@@ -26,6 +60,18 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });
+
+  // إذا كان المستخدم مسجل دخول بالفعل، لا نعرض النموذج
+  if (!authLoading && user) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#004705] mx-auto mb-4"></div>
+          <p className="text-gray-600">جاري التوجيه...</p>
+        </div>
+      </div>
+    );
+  }
 
   const onSubmit = async (data: LoginData) => {
     setIsLoading(true);
