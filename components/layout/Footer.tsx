@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import SocialIcon from '@/components/ui/SocialIcon';
-import { SUPABASE_STORAGE_CONFIG, IMAGE_FILES } from '@/lib/supabase-config';
+
 
 interface SocialLink {
   platform: string;
@@ -71,12 +71,13 @@ export default function Footer() {
         {/* Logo - Left on large screens, top on small screens */}
         <div className="mb-4 md:mb-0 md:order-1">
           <Image
-            src={SUPABASE_STORAGE_CONFIG.getPublicImageUrl(IMAGE_FILES.logoWhite)}
+            src="https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/logo-naebak-white.png"
             alt="نائبك.com"
             width={150}
             height={60}
             className="h-auto"
             priority
+            unoptimized
           />
         </div>
 

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الصور - نائبك</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: white;
+        }
+        .image-test {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>اختبار صور منصة نائبك</h1>
+    
+    <div class="image-test">
+        <h3>اللوجو الأخضر</h3>
+        <img src="https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/logo-naebak-green.png" 
+             alt="اللوجو الأخضر" 
+             onerror="this.nextElementSibling.innerHTML='❌ فشل في تحميل الصورة'" 
+             onload="this.nextElementSibling.innerHTML='✅ تم تحميل الصورة بنجاح'">
+        <div class="status"></div>
+    </div>
+
+    <div class="image-test">
+        <h3>اللوجو الأبيض</h3>
+        <img src="https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/logo-naebak-white.png" 
+             alt="اللوجو الأبيض" 
+             style="background-color: #333; padding: 10px;"
+             onerror="this.nextElementSibling.innerHTML='❌ فشل في تحميل الصورة'" 
+             onload="this.nextElementSibling.innerHTML='✅ تم تحميل الصورة بنجاح'">
+        <div class="status"></div>
+    </div>
+
+    <div class="image-test">
+        <h3>صورة البانر</h3>
+        <img src="https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/sisi-banner.jpg" 
+             alt="صورة البانر" 
+             onerror="this.nextElementSibling.innerHTML='❌ فشل في تحميل الصورة'" 
+             onload="this.nextElementSibling.innerHTML='✅ تم تحميل الصورة بنجاح'">
+        <div class="status"></div>
+    </div>
+
+    <div class="image-test">
+        <h3>الفيفأيقون 32x32</h3>
+        <img src="https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/favicon-32x32.png" 
+             alt="الفيفأيقون" 
+             onerror="this.nextElementSibling.innerHTML='❌ فشل في تحميل الصورة'" 
+             onload="this.nextElementSibling.innerHTML='✅ تم تحميل الصورة بنجاح'">
+        <div class="status"></div>
+    </div>
+
+    <script>
+        console.log('اختبار تحميل الصور من Supabase Storage');
+        
+        // اختبار الروابط برمجياً
+        const imageUrls = [
+            'https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/logo-naebak-green.png',
+            'https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/logo-naebak-white.png',
+            'https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/sisi-banner.jpg',
+            'https://brjgqodpzrhjfwteryse.supabase.co/storage/v1/object/public/banner_public_images/favicon-32x32.png'
+        ];
+
+        imageUrls.forEach((url, index) => {
+            fetch(url, { method: 'HEAD' })
+                .then(response => {
+                    console.log(`صورة ${index + 1}: ${response.ok ? '✅ متاحة' : '❌ غير متاحة'} - ${url}`);
+                })
+                .catch(error => {
+                    console.error(`صورة ${index + 1}: ❌ خطأ - ${url}`, error);
+                });
+        });
+    </script>
+</body>
+</html>
