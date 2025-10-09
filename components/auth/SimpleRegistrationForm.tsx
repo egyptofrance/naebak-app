@@ -47,17 +47,31 @@ export default function SimpleRegistrationForm() {
             router.push('/auth/login?message=confirm_email');
           }, 3000);
         } else {
-          setSuccess('تم إنشاء حسابك بنجاح! مرحباً بك في منصة نائبك.');
-          // إعادة توجيه للصفحة الرئيسية
+          setSuccess('تم إنشاء حسابك بنجاح! سيتم توجيهك لإكمال بياناتك...');
+          // إعادة توجيه لصفحة إكمال البيانات
           setTimeout(() => {
-            router.push('/');
+            router.push('/onboarding');
           }, 2000);
         }
       } else {
-        setError(result.error || 'حدث خطأ أثناء إنشاء الحساب');
+        // معالجة أخطاء محددة
+        if (result.error?.includes('already registered') || result.error?.includes('User already registered')) {
+          setError('هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.');
+        } else if (result.error?.includes('Invalid email')) {
+          setError('البريد الإلكتروني غير صحيح. يرجى التحقق من صحة البريد الإلكتروني.');
+        } else if (result.error?.includes('Password')) {
+          setError('كلمة المرور ضعيفة. يرجى استخدام كلمة مرور أقوى (8 أحرف على الأقل).');
+        } else {
+          setError(result.error || 'حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.');
+        }
       }
-    } catch (error) {
-      setError('حدث خطأ غير متوقع');
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      if (error?.message?.includes('already registered')) {
+        setError('هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.');
+      } else {
+        setError('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.');
+      }
     } finally {
       setIsLoading(false);
     }

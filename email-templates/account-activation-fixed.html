@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفعيل حسابك - منصة نائبك</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            direction: rtl;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #004705 0%, #006b07 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .header-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 15px;
+        }
+        
+        .welcome-text {
+            font-size: 16px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .activation-section {
+            background-color: #f7fafc;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .activation-text {
+            font-size: 16px;
+            color: #2d3748;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .activation-button {
+            display: inline-block;
+            background-color: #004705;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .activation-button:hover {
+            background-color: #003604;
+        }
+        
+        .activation-button:visited {
+            color: #ffffff !important;
+        }
+        
+        .features-section {
+            margin-bottom: 30px;
+        }
+        
+        .features-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #004705;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+        
+        .feature-text {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        
+        .security-notice {
+            background-color: #fef5e7;
+            border: 1px solid #f6ad55;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .security-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #c05621;
+            margin-bottom: 10px;
+        }
+        
+        .security-text {
+            font-size: 14px;
+            color: #9c4221;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background-color: #f7fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            margin-top: 20px;
+        }
+        
+        .footer-link {
+            color: #004705;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+        
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+        
+        .social-links {
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            display: inline-block;
+            margin: 0 10px;
+            color: #718096;
+            text-decoration: none;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 20px;
+            }
+            
+            .welcome-title {
+                font-size: 24px;
+            }
+            
+            .activation-button {
+                padding: 14px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">نائبك.com</div>
+            <p class="header-subtitle">منصة التواصل بين المواطنين ونوابهم</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Welcome Message -->
+            <div class="welcome-message">
+                <h1 class="welcome-title">🎉 مرحباً بك في منصة نائبك!</h1>
+                <p class="welcome-text">
+                    شكراً لك على التسجيل في منصة نائبك، المنصة الرائدة للتواصل بين المواطنين ونوابهم في مصر.
+                    نحن سعداء بانضمامك إلى مجتمعنا المتنامي.
+                </p>
+            </div>
+            
+            <!-- Activation Section -->
+            <div class="activation-section">
+                <p class="activation-text">
+                    <strong>لإكمال عملية التسجيل وتفعيل حسابك، يرجى النقر على الزر أدناه:</strong>
+                </p>
+                <a href="{{ .ConfirmationURL }}" class="activation-button">
+                    تفعيل الحساب الآن
+                </a>
+                <p style="font-size: 12px; color: #718096; margin-top: 15px;">
+                    هذا الرابط صالح لمدة 24 ساعة فقط
+                </p>
+            </div>
+            
+            <!-- Features Section -->
+            <div class="features-section">
+                <h2 class="features-title">ما يمكنك فعله بعد التفعيل:</h2>
+                <ul class="features-list">
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <span style="color: white; font-size: 12px;">✓</span>
+                        </div>
+                        <div class="feature-text">
+                            <strong>التواصل مع نوابك:</strong> أرسل رسائل مباشرة لنواب دائرتك الانتخابية
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <span style="color: white; font-size: 12px;">✓</span>
+                        </div>
+                        <div class="feature-text">
+                            <strong>تقديم الشكاوى:</strong> قدم شكاواك واقتراحاتك بطريقة منظمة وفعالة
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <span style="color: white; font-size: 12px;">✓</span>
+                        </div>
+                        <div class="feature-text">
+                            <strong>متابعة الأخبار:</strong> ابق على اطلاع بآخر أخبار دائرتك والبرلمان
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <span style="color: white; font-size: 12px;">✓</span>
+                        </div>
+                        <div class="feature-text">
+                            <strong>المشاركة في الاستطلاعات:</strong> شارك برأيك في القضايا المهمة
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <div class="security-title">⚠️ تنبيه أمني مهم</div>
+                <div class="security-text">
+                    إذا لم تقم بإنشاء هذا الحساب، يرجى تجاهل هذا البريد الإلكتروني.
+                    لن يتم تفعيل الحساب بدون النقر على رابط التفعيل أعلاه.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">
+                هذا البريد الإلكتروني تم إرساله من منصة نائبك.com<br>
+                إذا كان لديك أي استفسار، لا تتردد في التواصل معنا.
+            </p>
+            
+            <div class="footer-links">
+                <a href="https://www.naebak.com" class="footer-link">الموقع الرئيسي</a>
+                <a href="https://www.naebak.com/contact" class="footer-link">اتصل بنا</a>
+                <a href="https://www.naebak.com/privacy-policy" class="footer-link">سياسة الخصوصية</a>
+            </div>
+            
+            <div class="social-links">
+                <a href="#" class="social-link">فيسبوك</a>
+                <a href="#" class="social-link">تويتر</a>
+                <a href="#" class="social-link">إنستغرام</a>
+            </div>
+            
+            <p style="font-size: 12px; color: #a0aec0; margin-top: 20px;">
+                © 2025 منصة نائبك.com - جميع الحقوق محفوظة<br>
+                مصر - القاهرة
+            </p>
+        </div>
+    </div>
+</body>
+</html>

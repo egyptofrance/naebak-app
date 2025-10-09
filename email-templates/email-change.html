@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد تغيير البريد الإلكتروني - منصة نائبك</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            direction: rtl;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .header-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .change-message {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .change-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 15px;
+        }
+        
+        .change-text {
+            font-size: 16px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .email-details {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .email-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+        }
+        
+        .email-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .email-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #4a5568;
+            min-width: 120px;
+        }
+        
+        .email-value {
+            font-size: 14px;
+            color: #1a202c;
+            background-color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            flex: 1;
+            margin-right: 15px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .old-email {
+            background-color: #fef2f2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+        
+        .new-email {
+            background-color: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+        
+        .confirmation-section {
+            background-color: #eff6ff;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 2px solid #bfdbfe;
+        }
+        
+        .confirmation-details {
+            font-size: 16px;
+            color: #1e40af;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .confirmation-button {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .confirmation-button:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .confirmation-button:visited {
+            color: #ffffff !important;
+        }
+        
+        .important-notes {
+            margin-bottom: 30px;
+        }
+        
+        .notes-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .notes-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .note-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        
+        .note-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .note-icon {
+            width: 20px;
+            height: 20px;
+            background-color: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .security-warning {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .warning-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .warning-text {
+            font-size: 14px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background-color: #f7fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            margin-top: 20px;
+        }
+        
+        .footer-link {
+            color: #2563eb;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+        
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 20px;
+            }
+            
+            .change-title {
+                font-size: 24px;
+            }
+            
+            .confirmation-button {
+                padding: 14px 30px;
+                font-size: 16px;
+            }
+            
+            .email-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .email-value {
+                margin-right: 0;
+                margin-top: 5px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">نائبك.com</div>
+            <p class="header-subtitle">تأكيد تغيير البريد الإلكتروني</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Change Message -->
+            <div class="change-message">
+                <h1 class="change-title">📧 تأكيد تغيير البريد الإلكتروني</h1>
+                <p class="change-text">
+                    تلقينا طلباً لتغيير البريد الإلكتروني المرتبط بحسابك على منصة نائبك.
+                    يرجى مراجعة التفاصيل أدناه وتأكيد التغيير.
+                </p>
+            </div>
+            
+            <!-- Email Details -->
+            <div class="email-details">
+                <div class="email-row">
+                    <div class="email-label">البريد الحالي:</div>
+                    <div class="email-value old-email">{{ .Email }}</div>
+                </div>
+                <div class="email-row">
+                    <div class="email-label">البريد الجديد:</div>
+                    <div class="email-value new-email">{{ .NewEmail }}</div>
+                </div>
+            </div>
+            
+            <!-- Confirmation Section -->
+            <div class="confirmation-section">
+                <p class="confirmation-details">
+                    <strong>لتأكيد تغيير البريد الإلكتروني، انقر على الزر أدناه:</strong>
+                </p>
+                <a href="{{ .ConfirmationURL }}" class="confirmation-button">
+                    تأكيد تغيير البريد الإلكتروني
+                </a>
+                <p style="font-size: 12px; color: #1e40af; margin-top: 15px;">
+                    هذا الرابط صالح لمدة 24 ساعة فقط
+                </p>
+            </div>
+            
+            <!-- Important Notes -->
+            <div class="important-notes">
+                <h2 class="notes-title">📋 ملاحظات مهمة:</h2>
+                <ul class="notes-list">
+                    <li class="note-item">
+                        <div class="note-icon">
+                            <span style="color: white; font-size: 10px;">1</span>
+                        </div>
+                        <div>
+                            بعد التأكيد، ستحتاج لاستخدام البريد الجديد لتسجيل الدخول
+                        </div>
+                    </li>
+                    <li class="note-item">
+                        <div class="note-icon">
+                            <span style="color: white; font-size: 10px;">2</span>
+                        </div>
+                        <div>
+                            ستتلقى جميع الإشعارات المستقبلية على البريد الجديد
+                        </div>
+                    </li>
+                    <li class="note-item">
+                        <div class="note-icon">
+                            <span style="color: white; font-size: 10px;">3</span>
+                        </div>
+                        <div>
+                            تأكد من أن البريد الجديد صحيح ويمكنك الوصول إليه
+                        </div>
+                    </li>
+                    <li class="note-item">
+                        <div class="note-icon">
+                            <span style="color: white; font-size: 10px;">4</span>
+                        </div>
+                        <div>
+                            إذا لم تؤكد التغيير خلال 24 ساعة، ستحتاج لطلب التغيير مرة أخرى
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Security Warning -->
+            <div class="security-warning">
+                <div class="warning-title">⚠️ تحذير أمني</div>
+                <div class="warning-text">
+                    إذا لم تطلب تغيير البريد الإلكتروني، يرجى تجاهل هذا البريد والتواصل معنا فوراً.
+                    قد يكون هناك شخص يحاول الوصول إلى حسابك بطريقة غير مشروعة.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">
+                هذا البريد الإلكتروني تم إرساله من منصة نائبك.com<br>
+                للأمان، لا تشارك رابط التأكيد مع أي شخص آخر.
+            </p>
+            
+            <div class="footer-links">
+                <a href="https://www.naebak.com" class="footer-link">الموقع الرئيسي</a>
+                <a href="https://www.naebak.com/contact" class="footer-link">اتصل بنا</a>
+                <a href="https://www.naebak.com/privacy-policy" class="footer-link">سياسة الخصوصية</a>
+            </div>
+            
+            <p style="font-size: 12px; color: #a0aec0; margin-top: 20px;">
+                © 2025 منصة نائبك.com - جميع الحقوق محفوظة<br>
+                مصر - القاهرة
+            </p>
+        </div>
+    </div>
+</body>
+</html>

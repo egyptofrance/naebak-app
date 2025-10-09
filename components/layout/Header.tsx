@@ -1,50 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getCurrentUser, signOut } from '@/lib/auth';
+import { signOut } from '@/lib/auth';
+import { useAuth } from '@/hooks/useAuth';
 import Logo from '../ui/Logo';
 import VisitorCounter from '../ui/VisitorCounter';
 
-interface User {
-  id: string;
-  email?: string;
-  user_metadata: {
-    first_name?: string;
-    last_name?: string;
-    account_type?: string;
-  };
-}
-
 export default function Header() {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, isLoading } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const router = useRouter();
 
-  // جلب بيانات المستخدم الحالي
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchUser();
-  }, []);
-
   const handleSignOut = async () => {
     try {
       await signOut();
-      setUser(null);
       router.push('/');
     } catch (error) {
       console.error('Error signing out:', error);

@@ -65,92 +65,79 @@ export async function middleware(req: NextRequest) {
   // Public routes that don't require authentication
   const publicRoutes = [
     '/',
-
-    '/forgot-password',
-    '/reset-password',
+    '/auth/login',
+    '/auth/register',
+    '/auth/forgot-password',
+    '/auth/reset-password',
     '/auth/callback',
-    '/test-banner',
     '/mps',
     '/candidates',
     '/complaints',
     '/about',
     '/contact',
     '/unauthorized',
+    '/pending-approval',
+    '/account-rejected',
   ];
 
   // Check if the current path is public
   const isPublicRoute = publicRoutes.some((route) => path === route || path.startsWith(route));
 
+  // If user is authenticated
+  if (session?.user) {
+    const user = session.user;
+    const profileCompleted = user.user_metadata?.profile_completed || false;
+    const accountType = user.user_metadata?.account_type;
+    const accountStatus = user.user_metadata?.account_status || 'active';
+
+    // إذا لم يكمل المستخدم ملفه الشخصي
+    if (!profileCompleted && !path.startsWith('/onboarding')) {
+      // استثناءات: السماح بالوصول لصفحات معينة
+      const allowedPaths = ['/auth/logout', '/api', '/_next', '/favicon.ico'];
+      const isAllowedPath = allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+      
+      if (!isAllowedPath) {
+        return NextResponse.redirect(new URL('/onboarding', req.url));
+      }
+    }
+
+    // إذا كان المستخدم مرشح أو نائب وحسابه في انتظار الموافقة
+    if ((accountType === 'candidate' || accountType === 'mp') && accountStatus === 'pending') {
+      const allowedPaths = ['/pending-approval', '/auth/logout', '/api', '/_next', '/favicon.ico'];
+      const isAllowedPath = allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+      
+      if (!isAllowedPath) {
+        return NextResponse.redirect(new URL('/pending-approval', req.url));
+      }
+    }
+
+    // إذا كان المستخدم مرشح أو نائب وتم رفض حسابه
+    if ((accountType === 'candidate' || accountType === 'mp') && accountStatus === 'rejected') {
+      const allowedPaths = ['/account-rejected', '/auth/logout', '/api', '/_next', '/favicon.ico'];
+      const isAllowedPath = allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+      
+      if (!isAllowedPath) {
+        return NextResponse.redirect(new URL('/account-rejected', req.url));
+      }
+    }
+
+    // منع الوصول لصفحات المصادقة إذا كان مسجل دخول
+    if (path.startsWith('/auth/') && !path.startsWith('/auth/logout')) {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+  } else {
+    // إذا لم يكن مسجل دخول، منع الوصول للصفحات المحمية
+    const protectedPaths = ['/dashboard', '/profile', '/onboarding'];
+    const isProtectedPath = protectedPaths.some(protectedPath => path.startsWith(protectedPath));
+    
+    if (isProtectedPath) {
+      return NextResponse.redirect(new URL('/auth/login', req.url));
+    }
+  }
+
   // If the route is public, allow access
   if (isPublicRoute) {
     return response;
-  }
-
-  // Protected routes require authentication
-  const protectedRoutes = ['/admin', '/manager', '/citizen', '/mp', '/candidate', '/dashboard'];
-  const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
-
-  if (isProtectedRoute) {
-    // If no session, redirect to login
-    if (!session) {
-      const redirectUrl = new URL('/login', req.url);
-      redirectUrl.searchParams.set('redirect', path);
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    // Get user role
-    try {
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('role_id')
-        .eq('auth_id', session.user.id)
-        .single();
-
-      if (userError || !userData) {
-        return NextResponse.redirect(new URL('/login', req.url));
-      }
-
-      const { data: roleData, error: roleError } = await supabase
-        .from('roles')
-        .select('name')
-        .eq('id', userData.role_id)
-        .single();
-
-      if (roleError || !roleData) {
-        return NextResponse.redirect(new URL('/login', req.url));
-      }
-
-      const userRole = roleData.name;
-
-      // Role-based access control
-      if (path.startsWith('/admin') && userRole !== 'admin') {
-        return NextResponse.redirect(new URL('/unauthorized', req.url));
-      }
-
-      if (path.startsWith('/manager') && !['admin', 'manager'].includes(userRole)) {
-        return NextResponse.redirect(new URL('/unauthorized', req.url));
-      }
-
-      if (path.startsWith('/citizen') && !['admin', 'manager', 'citizen'].includes(userRole)) {
-        return NextResponse.redirect(new URL('/unauthorized', req.url));
-      }
-
-      if (path.startsWith('/mp') && !['admin', 'mp'].includes(userRole)) {
-        return NextResponse.redirect(new URL('/unauthorized', req.url));
-      }
-
-      if (path.startsWith('/candidate') && !['admin', 'candidate'].includes(userRole)) {
-        return NextResponse.redirect(new URL('/unauthorized', req.url));
-      }
-
-      // Dashboard is accessible to all authenticated users
-      if (path === '/dashboard') {
-        return response;
-      }
-    } catch (error) {
-      console.error('Middleware error:', error);
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
   }
 
   return response;

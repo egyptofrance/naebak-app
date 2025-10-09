@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كود إعادة المصادقة - منصة نائبك</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            direction: rtl;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .header-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .auth-message {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 15px;
+        }
+        
+        .auth-text {
+            font-size: 16px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .code-section {
+            background-color: #fef2f2;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 2px solid #fecaca;
+        }
+        
+        .code-label {
+            font-size: 16px;
+            color: #991b1b;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .verification-code {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #dc2626;
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            padding: 20px 30px;
+            border-radius: 8px;
+            border: 3px solid #dc2626;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+            user-select: all;
+            cursor: pointer;
+        }
+        
+        .code-instructions {
+            font-size: 14px;
+            color: #991b1b;
+            line-height: 1.5;
+        }
+        
+        .usage-steps {
+            margin-bottom: 30px;
+        }
+        
+        .steps-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .steps-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .step-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background-color: #dc2626;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            flex-shrink: 0;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .step-text {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        
+        .security-info {
+            background-color: #f0f9ff;
+            border: 1px solid #7dd3fc;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .security-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0c4a6e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .security-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .security-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #0f172a;
+            line-height: 1.5;
+        }
+        
+        .security-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .security-icon {
+            width: 20px;
+            height: 20px;
+            background-color: #0ea5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .warning-section {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .warning-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .warning-text {
+            font-size: 14px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background-color: #f7fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            margin-top: 20px;
+        }
+        
+        .footer-link {
+            color: #dc2626;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+        
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 20px;
+            }
+            
+            .auth-title {
+                font-size: 24px;
+            }
+            
+            .verification-code {
+                font-size: 24px;
+                padding: 15px 20px;
+                letter-spacing: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">نائبك.com</div>
+            <p class="header-subtitle">كود إعادة المصادقة الأمني</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Auth Message -->
+            <div class="auth-message">
+                <h1 class="auth-title">🔐 كود إعادة المصادقة</h1>
+                <p class="auth-text">
+                    لحماية حسابك وضمان الأمان، نحتاج للتحقق من هويتك.
+                    استخدم الكود أدناه لإكمال عملية إعادة المصادقة.
+                </p>
+            </div>
+            
+            <!-- Code Section -->
+            <div class="code-section">
+                <div class="code-label">أدخل هذا الكود في الموقع:</div>
+                <div class="verification-code">{{ .Token }}</div>
+                <div class="code-instructions">
+                    انقر على الكود لنسخه تلقائياً<br>
+                    <strong>صالح لمدة 5 دقائق فقط</strong>
+                </div>
+            </div>
+            
+            <!-- Usage Steps -->
+            <div class="usage-steps">
+                <h2 class="steps-title">خطوات الاستخدام:</h2>
+                <ul class="steps-list">
+                    <li class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-text">
+                            <strong>ارجع إلى الموقع</strong><br>
+                            عد إلى صفحة إعادة المصادقة في منصة نائبك
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-text">
+                            <strong>أدخل الكود</strong><br>
+                            انسخ الكود أعلاه والصقه في الحقل المخصص
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-text">
+                            <strong>اضغط تأكيد</strong><br>
+                            انقر على زر "تأكيد" لإكمال عملية المصادقة
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-text">
+                            <strong>استكمل العملية</strong><br>
+                            ستتمكن من الوصول للميزة المطلوبة بعد التأكيد
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Security Info -->
+            <div class="security-info">
+                <div class="security-title">
+                    🛡️ معلومات أمنية مهمة
+                </div>
+                <ul class="security-list">
+                    <li class="security-item">
+                        <div class="security-icon">
+                            <span style="color: white; font-size: 10px;">⏰</span>
+                        </div>
+                        <div>
+                            <strong>مدة الصلاحية:</strong> الكود صالح لمدة 5 دقائق فقط من وقت الإرسال
+                        </div>
+                    </li>
+                    <li class="security-item">
+                        <div class="security-icon">
+                            <span style="color: white; font-size: 10px;">🔒</span>
+                        </div>
+                        <div>
+                            <strong>الاستخدام الواحد:</strong> يمكن استخدام الكود مرة واحدة فقط
+                        </div>
+                    </li>
+                    <li class="security-item">
+                        <div class="security-icon">
+                            <span style="color: white; font-size: 10px;">🚫</span>
+                        </div>
+                        <div>
+                            <strong>عدم المشاركة:</strong> لا تشارك هذا الكود مع أي شخص آخر
+                        </div>
+                    </li>
+                    <li class="security-item">
+                        <div class="security-icon">
+                            <span style="color: white; font-size: 10px;">🔄</span>
+                        </div>
+                        <div>
+                            <strong>طلب كود جديد:</strong> يمكنك طلب كود جديد إذا انتهت صلاحية هذا الكود
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Warning Section -->
+            <div class="warning-section">
+                <div class="warning-title">⚠️ تحذير أمني</div>
+                <div class="warning-text">
+                    إذا لم تطلب إعادة المصادقة، يرجى تجاهل هذا البريد والتواصل معنا فوراً.
+                    قد يكون هناك شخص يحاول الوصول إلى حسابك أو تنفيذ عملية حساسة بدون إذنك.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">
+                هذا البريد الإلكتروني تم إرساله من منصة نائبك.com<br>
+                للأمان القصوى، لا تشارك هذا الكود مع أي شخص آخر.
+            </p>
+            
+            <div class="footer-links">
+                <a href="https://www.naebak.com" class="footer-link">الموقع الرئيسي</a>
+                <a href="https://www.naebak.com/contact" class="footer-link">اتصل بنا</a>
+                <a href="https://www.naebak.com/security" class="footer-link">الأمان</a>
+            </div>
+            
+            <p style="font-size: 12px; color: #a0aec0; margin-top: 20px;">
+                © 2025 منصة نائبك.com - جميع الحقوق محفوظة<br>
+                مصر - القاهرة
+            </p>
+        </div>
+    </div>
+</body>
+</html>

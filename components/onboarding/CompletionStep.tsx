@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle, Users, Award, Building, ArrowLeft, Home } from 'lucide-react';
+import { CheckCircle, Users, Award, Building, ArrowLeft, Home, Clock, AlertCircle } from 'lucide-react';
 
 type UserRole = 'citizen' | 'candidate' | 'mp';
 
@@ -10,6 +10,8 @@ interface CompletionStepProps {
 }
 
 export default function CompletionStep({ selectedRole, onComplete }: CompletionStepProps) {
+  const requiresApproval = selectedRole === 'candidate' || selectedRole === 'mp';
+  
   const getRoleInfo = () => {
     switch (selectedRole) {
       case 'citizen':
@@ -114,7 +116,7 @@ export default function CompletionStep({ selectedRole, onComplete }: CompletionS
       {/* Success Message */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          🎉 تم إعداد حسابك بنجاح!
+          {requiresApproval ? '📋 تم إرسال طلبك بنجاح!' : '🎉 تم إعداد حسابك بنجاح!'}
         </h1>
         <div className={`inline-flex items-center px-4 py-2 rounded-full ${colorClasses.bg} ${colorClasses.border} border mb-4`}>
           <Icon className={`w-5 h-5 ${colorClasses.text} ml-2`} />
@@ -123,7 +125,10 @@ export default function CompletionStep({ selectedRole, onComplete }: CompletionS
           </span>
         </div>
         <p className="text-lg text-gray-600 leading-relaxed">
-          {roleInfo.message}
+          {requiresApproval ? 
+            `طلبك كـ${roleInfo.name} قيد المراجعة من قبل فريق الإدارة. سيتم التواصل معك خلال 24-48 ساعة.` : 
+            roleInfo.message
+          }
         </p>
       </div>
 
@@ -149,19 +154,60 @@ export default function CompletionStep({ selectedRole, onComplete }: CompletionS
 
       {/* Next Steps */}
       <div className="mb-8">
-        <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
-          <h3 className="text-lg font-medium text-blue-900 mb-3">
-            💡 الخطوات التالية
-          </h3>
-          <div className="text-blue-800 text-sm space-y-2">
-            <p>• استكشف المنصة وتعرف على مميزاتها</p>
-            <p>• يمكنك تعديل بياناتك في أي وقت من إعدادات الحساب</p>
-            <p>• ابدأ في استخدام المنصة للتواصل والمشاركة</p>
-            {selectedRole === 'candidate' || selectedRole === 'mp' ? (
-              <p>• أكمل ملفك الشخصي بإضافة البرنامج والإنجازات</p>
-            ) : null}
+        {requiresApproval ? (
+          <div className="space-y-4">
+            <div className="bg-yellow-50 rounded-lg border border-yellow-200 p-6">
+              <div className="flex items-center mb-3">
+                <Clock className="w-5 h-5 text-yellow-600 ml-2" />
+                <h3 className="text-lg font-medium text-yellow-900">
+                  ⏳ في انتظار الموافقة
+                </h3>
+              </div>
+              <div className="text-yellow-800 text-sm space-y-2">
+                <p>• سيتم مراجعة طلبك خلال 24-48 ساعة</p>
+                <p>• ستتلقى إشعاراً عبر البريد الإلكتروني بالنتيجة</p>
+                <p>• يمكنك تسجيل الدخول لمتابعة حالة الطلب</p>
+                <p>• في حالة الحاجة لمعلومات إضافية، سنتواصل معك</p>
+              </div>
+            </div>
+            
+            <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
+              <div className="flex items-center mb-3">
+                <AlertCircle className="w-5 h-5 text-blue-600 ml-2" />
+                <h3 className="text-lg font-medium text-blue-900">
+                  📋 متطلبات المراجعة
+                </h3>
+              </div>
+              <div className="text-blue-800 text-sm space-y-2">
+                {selectedRole === 'candidate' && (
+                  <>
+                    <p>• التحقق من صحة البيانات الانتخابية</p>
+                    <p>• مراجعة الوثائق المطلوبة</p>
+                    <p>• التأكد من أهلية الترشح</p>
+                  </>
+                )}
+                {selectedRole === 'mp' && (
+                  <>
+                    <p>• التحقق من عضوية البرلمان</p>
+                    <p>• مراجعة الوثائق الرسمية</p>
+                    <p>• التأكد من صحة البيانات</p>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
+            <h3 className="text-lg font-medium text-blue-900 mb-3">
+              💡 الخطوات التالية
+            </h3>
+            <div className="text-blue-800 text-sm space-y-2">
+              <p>• استكشف المنصة وتعرف على مميزاتها</p>
+              <p>• يمكنك تعديل بياناتك في أي وقت من إعدادات الحساب</p>
+              <p>• ابدأ في استخدام المنصة للتواصل والمشاركة</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Action Buttons */}
@@ -170,8 +216,17 @@ export default function CompletionStep({ selectedRole, onComplete }: CompletionS
           onClick={onComplete}
           className={`w-full inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white ${colorClasses.button} focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors`}
         >
-          <Home className="w-6 h-6 ml-2" />
-          الذهاب للصفحة الرئيسية
+          {requiresApproval ? (
+            <>
+              <Clock className="w-6 h-6 ml-2" />
+              متابعة حالة الطلب
+            </>
+          ) : (
+            <>
+              <Home className="w-6 h-6 ml-2" />
+              الذهاب للصفحة الرئيسية
+            </>
+          )}
         </button>
         
         {(selectedRole === 'candidate' || selectedRole === 'mp') && (
