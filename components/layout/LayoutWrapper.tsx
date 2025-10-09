@@ -2,7 +2,7 @@
 
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Banner from '@/components/layout/Banner';
+import SimpleBanner from '@/components/layout/SimpleBanner';
 import NewsBar from '@/components/layout/NewsBar';
 
 interface LayoutWrapperProps {
@@ -73,7 +73,7 @@ export default function LayoutWrapper({
     <>
       {showBannerAndNewsBar && (
         <>
-          <Banner 
+          <SimpleBanner 
             pageType={bannerPageType} 
             governorateId={governorateId} 
           />
