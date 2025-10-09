@@ -33,10 +33,56 @@ export async function signIn(email: string, password: string) {
   }
 }
 
-// تسجيل حساب جديد
-export async function signUp(email: string, password: string, userData: any) {
+// التحقق من وجود إيميل مسجل مسبقاً
+export async function checkEmailExists(email: string) {
   try {
-    // إنشاء حساب جديد
+    // محاولة تسجيل الدخول بكلمة مرور خاطئة للتحقق من وجود الحساب
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password: 'dummy_password_to_check_existence_' + Math.random()
+    });
+
+    // إذا كان الخطأ "Invalid login credentials" فهذا يعني أن الإيميل موجود
+    if (error && error.message.includes('Invalid login credentials')) {
+      return { exists: true };
+    }
+    
+    // إذا كان الخطأ "User not found" أو مشابه فالإيميل غير موجود
+    if (error && (error.message.includes('User not found') || error.message.includes('Invalid email'))) {
+      return { exists: false };
+    }
+
+    // إذا نجح تسجيل الدخول (مستحيل مع كلمة مرور عشوائية) فالإيميل موجود
+    if (data.user) {
+      // تسجيل خروج فوري
+      await supabase.auth.signOut();
+      return { exists: true };
+    }
+
+    // في حالة أي خطأ آخر، نفترض أن الإيميل غير موجود
+    return { exists: false };
+  } catch (error) {
+    console.error('Error checking email existence:', error);
+    // في حالة الخطأ، نسمح بالمتابعة
+    return { exists: false };
+  }
+}
+
+// تسجيل مستخدم جديد
+export async function signUp(email: string, password: string, userData: any = {}) {
+  try {
+    console.log('Starting signUp process for:', email);
+    
+    // التحقق من وجود الإيميل أولاً
+    const emailCheck = await checkEmailExists(email);
+    if (emailCheck.exists) {
+      console.log('Email already exists:', email);
+      return { 
+        success: false, 
+        error: 'هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.' 
+      };
+    }
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
