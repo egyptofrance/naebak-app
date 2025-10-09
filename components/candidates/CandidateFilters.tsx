@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, Filter, X } from 'lucide-react';
+import ElectoralDistrictInput from '@/components/forms/ElectoralDistrictInput';
 import Image from 'next/image';
 
 interface Governorate {
@@ -9,10 +10,7 @@ interface Governorate {
   name: string;
 }
 
-interface Council {
-  id: string;
-  name: string;
-}
+
 
 interface Party {
   id: string;
@@ -27,12 +25,12 @@ interface Symbol {
 
 interface CandidateFiltersProps {
   governorates: Governorate[];
-  councils: Council[];
+
   parties: Party[];
   symbols: Symbol[];
   onFilterChange: (filters: {
     governorate: string;
-    council: string;
+    electoralDistrict: string;
     party: string;
     symbol: string;
     search: string;
@@ -41,13 +39,13 @@ interface CandidateFiltersProps {
 
 export default function CandidateFilters({
   governorates,
-  councils,
+  electoralDistrict: initialElectoralDistrict,
   parties,
   symbols,
   onFilterChange,
 }: CandidateFiltersProps) {
-  const [selectedGovernorate, setSelectedGovernorate] = useState('');
-  const [selectedCouncil, setSelectedCouncil] = useState('');
+  const [selectedGovernorate, setSelectedGovernorate] = useState("");
+  const [selectedCouncil, setSelectedCouncil] = useState(initialElectoralDistrict || "");
   const [selectedParty, setSelectedParty] = useState('');
   const [selectedSymbol, setSelectedSymbol] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,7 +54,7 @@ export default function CandidateFilters({
   const handleFilterChange = () => {
     onFilterChange({
       governorate: selectedGovernorate,
-      council: selectedCouncil,
+      electoralDistrict: selectedCouncil, // selectedCouncil now holds the manual input
       party: selectedParty,
       symbol: selectedSymbol,
       search: searchTerm,
@@ -70,11 +68,11 @@ export default function CandidateFilters({
     setSelectedSymbol('');
     setSearchTerm('');
     onFilterChange({
-      governorate: '',
-      council: '',
-      party: '',
-      symbol: '',
-      search: '',
+      governorate: "",
+      electoralDistrict: "",
+      party: "",
+      symbol: "",
+      search: "",
     });
   };
 
@@ -150,27 +148,14 @@ export default function CandidateFilters({
               </select>
             </div>
 
-            {/* Council Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                المجلس
-              </label>
-              <select
-                value={selectedCouncil}
-                onChange={(e) => {
-                  setSelectedCouncil(e.target.value);
-                  handleFilterChange();
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">جميع المجالس</option>
-                {councils.map((council) => (
-                  <option key={council.id} value={council.id}>
-                    {council.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Electoral District Manual Input */}
+            <ElectoralDistrictInput
+              value={selectedCouncil}
+              onChange={(value) => {
+                setSelectedCouncil(value);
+                handleFilterChange();
+              }}
+            />
 
             {/* Party Filter */}
             <div>

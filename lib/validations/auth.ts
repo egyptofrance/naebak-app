@@ -37,11 +37,7 @@ export const profileCompletionSchema = z.object({
     .refine((val) => !val || /^(\+20|0)?1[0125]\d{8}$/.test(val), {
       message: 'يرجى إدخال رقم هاتف مصري صحيح',
     }),
-  nationalId: z
-    .string()
-    .min(14, 'الرقم القومي يجب أن يكون 14 رقم')
-    .max(14, 'الرقم القومي يجب أن يكون 14 رقم')
-    .regex(/^\d{14}$/, 'الرقم القومي يجب أن يحتوي على أرقام فقط'),
+
   birthDate: z
     .string()
     .min(1, 'تاريخ الميلاد مطلوب')

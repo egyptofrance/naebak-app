@@ -322,7 +322,7 @@ export async function completeProfile(data: any): Promise<{success: boolean, err
         first_name: data.firstName,
         last_name: data.lastName,
         phone: data.phone,
-        national_id: data.nationalId,
+
         gender: data.gender,
         dob: data.dateOfBirth,
         governorate_id: data.governorateId,

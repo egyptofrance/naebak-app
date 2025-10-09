@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User, Phone, CreditCard, Calendar, MapPin, ChevronDown } from 'lucide-react';
+import { User, Phone, Calendar, MapPin, ChevronDown } from 'lucide-react';
 import { profileCompletionSchema, type ProfileCompletionData } from '@/lib/validations/auth';
 import { completeProfile, getGovernorates, getConstituencies } from '@/lib/auth';
 
@@ -182,30 +182,7 @@ export default function ProfileCompletionForm({ onSuccess, onError }: ProfileCom
             )}
           </div>
 
-          <div>
-            <label htmlFor="nationalId" className="block text-sm font-medium text-gray-700 mb-2">
-              الرقم القومي *
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <CreditCard className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                {...register('nationalId')}
-                type="text"
-                id="nationalId"
-                maxLength={14}
-                className={`block w-full pr-10 pl-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#004705] focus:border-[#004705] ${
-                  errors.nationalId ? 'border-red-300' : 'border-gray-300'
-                }`}
-                placeholder="14 رقم"
-                dir="ltr"
-              />
-            </div>
-            {errors.nationalId && (
-              <p className="mt-1 text-sm text-red-600">{errors.nationalId.message}</p>
-            )}
-          </div>
+
         </div>
 
         {/* Birth Date and Gender */}

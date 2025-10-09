@@ -53,7 +53,7 @@ const ITEMS_PER_PAGE = 12;
 export default function CandidatesPage() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [governorates, setGovernorates] = useState<Governorate[]>([]);
-  const [councils, setCouncils] = useState<Council[]>([]);
+
   const [parties, setParties] = useState<Party[]>([]);
   const [symbols, setSymbols] = useState<Symbol[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +62,7 @@ export default function CandidatesPage() {
   
   // Filters
   const [selectedGovernorate, setSelectedGovernorate] = useState<string>('');
-  const [selectedCouncil, setSelectedCouncil] = useState<string>('');
+  const [selectedElectoralDistrict, setSelectedElectoralDistrict] = useState<string>("");
   const [selectedParty, setSelectedParty] = useState<string>('');
   const [selectedSymbol, setSelectedSymbol] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -79,11 +79,7 @@ export default function CandidatesPage() {
           .select('id, name')
           .order('name');
 
-        // Fetch councils
-        const { data: councilsData } = await supabase
-          .from('councils')
-          .select('id, name')
-          .order('name');
+
 
         // Fetch parties
         const { data: partiesData } = await supabase
@@ -98,7 +94,7 @@ export default function CandidatesPage() {
           .order('name');
 
         setGovernorates(governoratesData || []);
-        setCouncils(councilsData || []);
+
         setParties(partiesData || []);
         setSymbols(symbolsData || []);
       } catch (error) {
@@ -143,8 +139,8 @@ export default function CandidatesPage() {
           query = query.eq('governorate_id', selectedGovernorate);
         }
 
-        if (selectedCouncil) {
-          query = query.eq('profiles.council_id', selectedCouncil);
+        if (selectedElectoralDistrict) {
+          query = query.ilike("profiles.district", `%${selectedElectoralDistrict}%`);
         }
 
         if (selectedParty) {
@@ -180,17 +176,17 @@ export default function CandidatesPage() {
     };
 
     fetchCandidates();
-  }, [supabase, selectedGovernorate, selectedCouncil, selectedParty, selectedSymbol, searchTerm, currentPage]);
+  }, [supabase, selectedGovernorate, selectedElectoralDistrict, selectedParty, selectedSymbol, searchTerm, currentPage]);
 
   const handleFilterChange = (filters: {
     governorate: string;
-    council: string;
+    electoralDistrict: string;
     party: string;
     symbol: string;
     search: string;
   }) => {
     setSelectedGovernorate(filters.governorate);
-    setSelectedCouncil(filters.council);
+    setSelectedElectoralDistrict(filters.electoralDistrict);
     setSelectedParty(filters.party);
     setSelectedSymbol(filters.symbol);
     setSearchTerm(filters.search);
@@ -216,7 +212,7 @@ export default function CandidatesPage() {
         {/* Filters */}
         <CandidateFilters
           governorates={governorates}
-          councils={councils}
+          electoralDistrict={selectedElectoralDistrict}
           parties={parties}
           symbols={symbols}
           onFilterChange={handleFilterChange}
