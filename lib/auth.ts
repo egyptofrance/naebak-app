@@ -93,16 +93,6 @@ export async function signUp(email: string, password: string, userData: any = {}
   try {
     console.log('Starting signUp process for:', email);
     
-    // التحقق من وجود الإيميل أولاً
-    const emailCheck = await checkEmailExists(email);
-    if (emailCheck.exists) {
-      console.log('Email already exists:', email);
-      return { 
-        success: false, 
-        error: 'هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.' 
-      };
-    }
-    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
