@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { User, Phone, Calendar, MapPin, ChevronDown } from 'lucide-react';
 import { profileCompletionSchema, type ProfileCompletionData } from '@/lib/validations/auth';
-import { completeProfile, getGovernorates, getConstituencies } from '@/lib/auth';
+import { completeProfile, getGovernorates } from '@/lib/auth';
 
 interface ProfileCompletionFormProps {
   onSuccess: (data: any) => void;
@@ -18,29 +18,17 @@ interface Governorate {
   code: string;
 }
 
-interface Constituency {
-  id: number;
-  name: string;
-  governorate_id: number;
-}
-
 export default function ProfileCompletionForm({ onSuccess, onError }: ProfileCompletionFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [governorates, setGovernorates] = useState<Governorate[]>([]);
-  const [constituencies, setConstituencies] = useState<Constituency[]>([]);
-  const [loadingConstituencies, setLoadingConstituencies] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-    setValue,
   } = useForm<ProfileCompletionData>({
     resolver: zodResolver(profileCompletionSchema),
   });
-
-  const selectedGovernorate = watch('governorateId');
 
   // Load governorates on component mount
   useEffect(() => {
@@ -56,26 +44,7 @@ export default function ProfileCompletionForm({ onSuccess, onError }: ProfileCom
     loadGovernorates();
   }, [onError]);
 
-  // Load constituencies when governorate changes
-  useEffect(() => {
-    if (selectedGovernorate) {
-      const loadConstituencies = async () => {
-        setLoadingConstituencies(true);
-        const result = await getConstituencies(selectedGovernorate);
-        if (result.success && result.data) {
-          setConstituencies(result.data);
-          setValue('constituencyId', 0); // Reset constituency selection
-        } else {
-          onError('حدث خطأ أثناء تحميل الدوائر الانتخابية');
-        }
-        setLoadingConstituencies(false);
-      };
 
-      loadConstituencies();
-    } else {
-      setConstituencies([]);
-    }
-  }, [selectedGovernorate, setValue, onError]);
 
   const onSubmit = async (data: ProfileCompletionData) => {
     setIsLoading(true);
@@ -156,33 +125,29 @@ export default function ProfileCompletionForm({ onSuccess, onError }: ProfileCom
           </div>
         </div>
 
-        {/* Phone and National ID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-              رقم الهاتف (اختياري)
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <Phone className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                {...register('phone')}
-                type="tel"
-                id="phone"
-                className={`block w-full pr-10 pl-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#004705] focus:border-[#004705] ${
-                  errors.phone ? 'border-red-300' : 'border-gray-300'
-                }`}
-                placeholder="01xxxxxxxxx"
-                dir="ltr"
-              />
+        {/* Phone Field */}
+        <div>
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+            رقم الهاتف (اختياري)
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+              <Phone className="h-5 w-5 text-gray-400" />
             </div>
-            {errors.phone && (
-              <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
-            )}
+            <input
+              {...register('phone')}
+              type="tel"
+              id="phone"
+              className={`block w-full pr-10 pl-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#004705] focus:border-[#004705] ${
+                errors.phone ? 'border-red-300' : 'border-gray-300'
+              }`}
+              placeholder="01xxxxxxxxx"
+              dir="ltr"
+            />
           </div>
-
-
+          {errors.phone && (
+            <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+          )}
         </div>
 
         {/* Birth Date and Gender */}
@@ -269,36 +234,25 @@ export default function ProfileCompletionForm({ onSuccess, onError }: ProfileCom
           </div>
 
           <div>
-            <label htmlFor="constituencyId" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="constituency" className="block text-sm font-medium text-gray-700 mb-2">
               الدائرة الانتخابية *
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                 <MapPin className="h-5 w-5 text-gray-400" />
               </div>
-              <select
-                {...register('constituencyId', { valueAsNumber: true })}
-                id="constituencyId"
-                disabled={!selectedGovernorate || loadingConstituencies}
-                className={`block w-full pr-10 pl-10 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#004705] focus:border-[#004705] disabled:bg-gray-100 disabled:cursor-not-allowed ${
-                  errors.constituencyId ? 'border-red-300' : 'border-gray-300'
+              <input
+                {...register('constituency')}
+                type="text"
+                id="constituency"
+                className={`block w-full pr-10 pl-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#004705] focus:border-[#004705] ${
+                  errors.constituency ? 'border-red-300' : 'border-gray-300'
                 }`}
-              >
-                <option value="">
-                  {loadingConstituencies ? 'جاري التحميل...' : 'اختر الدائرة الانتخابية'}
-                </option>
-                {constituencies.map((constituency) => (
-                  <option key={constituency.id} value={constituency.id}>
-                    {constituency.name}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <ChevronDown className="h-5 w-5 text-gray-400" />
-              </div>
+                placeholder="أدخل اسم الدائرة الانتخابية"
+              />
             </div>
-            {errors.constituencyId && (
-              <p className="mt-1 text-sm text-red-600">{errors.constituencyId.message}</p>
+            {errors.constituency && (
+              <p className="mt-1 text-sm text-red-600">{errors.constituency.message}</p>
             )}
           </div>
         </div>

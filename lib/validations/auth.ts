@@ -53,9 +53,10 @@ export const profileCompletionSchema = z.object({
   governorateId: z
     .number()
     .min(1, 'يرجى اختيار المحافظة'),
-  constituencyId: z
-    .number()
-    .min(1, 'يرجى اختيار الدائرة الانتخابية'),
+  constituency: z
+    .string()
+    .min(2, 'يرجى إدخال اسم الدائرة الانتخابية')
+    .max(100, 'اسم الدائرة الانتخابية طويل جداً'),
 });
 
 // Role selection schema (Step 3)

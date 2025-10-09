@@ -25,7 +25,7 @@ interface Symbol {
 
 interface CandidateFiltersProps {
   governorates: Governorate[];
-
+  electoralDistrict?: string;
   parties: Party[];
   symbols: Symbol[];
   onFilterChange: (filters: {
@@ -94,7 +94,7 @@ export default function CandidateFilters({
               setTimeout(() => {
                 onFilterChange({
                   governorate: selectedGovernorate,
-                  council: selectedCouncil,
+                  electoralDistrict: selectedCouncil,
                   party: selectedParty,
                   symbol: selectedSymbol,
                   search: e.target.value,
