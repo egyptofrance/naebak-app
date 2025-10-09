@@ -1,7 +1,6 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { createClient } from '@/lib/supabase';
 
-const supabase = createClientComponentClient();
+const supabase = createClient();
 
 // تسجيل الدخول
 export async function signIn(email: string, password: string) {
