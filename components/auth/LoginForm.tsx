@@ -34,19 +34,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
       const result = await signIn(data.email, data.password);
       
       if (result.success) {
-        // فحص ما إذا كان المستخدم يحتاج لاختيار نوع الحساب
-        if (result.needsUserTypeSelection) {
-          router.push('/auth/select-user-type');
-          return;
-        }
-        
-        // فحص ما إذا كان الحساب في انتظار الموافقة
-        if (result.needsApproval) {
-          router.push('/pending-approval');
-          return;
-        }
-        
-        // إذا كان كل شيء جاهز، توجيه للصفحة المطلوبة أو لوحة التحكم
+        // توجيه للصفحة المطلوبة أو لوحة التحكم
         router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
         router.refresh();
       } else {
@@ -244,15 +232,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
               </button>
             </div>
 
-            {/* Register Link */}
-            <div className="text-center">
-              <p className="text-sm text-gray-600">
-                ليس لديك حساب؟{' '}
-                <a href="/auth/register" className="font-medium text-[#004705] hover:underline">
-                  إنشاء حساب جديد
-                </a>
-              </p>
-            </div>
+
           </form>
         </div>
       </div>

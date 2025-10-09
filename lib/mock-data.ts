@@ -108,17 +108,6 @@ export const mockSupabaseClient = {
     })
   }),
   auth: {
-    signUp: (credentials: any) => {
-      return Promise.resolve({
-        data: {
-          user: {
-            id: 'mock-user-id-' + Date.now(),
-            email: credentials.email
-          }
-        },
-        error: null
-      });
-    },
     signInWithPassword: (credentials: any) => {
       return Promise.resolve({
         data: {

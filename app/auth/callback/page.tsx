@@ -22,9 +22,9 @@ export default function AuthCallback() {
         }
 
         if (data.session) {
-          console.log('Auth callback successful, redirecting to registration step 2');
-          // Redirect to step 2 of registration
-          router.push('/auth/register?step=2');
+          console.log('Auth callback successful, redirecting to dashboard');
+          // Redirect to dashboard
+          router.push('/dashboard');
         } else {
           console.log('No session found, redirecting to login');
           router.push('/auth/login');
