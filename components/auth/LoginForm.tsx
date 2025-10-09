@@ -34,8 +34,20 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
       const result = await signIn(data.email, data.password);
       
       if (result.success) {
-        // Redirect to the specified page or dashboard
-        router.push(redirectTo);
+        // فحص ما إذا كان المستخدم يحتاج لاختيار نوع الحساب
+        if (result.needsUserTypeSelection) {
+          router.push('/auth/select-user-type');
+          return;
+        }
+        
+        // فحص ما إذا كان الحساب في انتظار الموافقة
+        if (result.needsApproval) {
+          router.push('/pending-approval');
+          return;
+        }
+        
+        // إذا كان كل شيء جاهز، توجيه للصفحة المطلوبة أو لوحة التحكم
+        router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
         router.refresh();
       } else {
         setError(result.error || 'حدث خطأ أثناء تسجيل الدخول');

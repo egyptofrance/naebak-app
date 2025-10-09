@@ -4,6 +4,8 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- Create custom types
 CREATE TYPE user_role AS ENUM ('admin', 'user', 'moderator');
+CREATE TYPE user_type_enum AS ENUM ('citizen', 'mp', 'candidate');
+CREATE TYPE account_status_enum AS ENUM ('pending', 'active', 'suspended');
 CREATE TYPE order_status AS ENUM ('pending', 'processing', 'shipped', 'delivered', 'cancelled');
 CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed', 'refunded');
 
@@ -16,6 +18,9 @@ CREATE TABLE public.users (
     phone TEXT,
     date_of_birth DATE,
     role user_role DEFAULT 'user',
+    user_type user_type_enum,
+    account_status account_status_enum DEFAULT 'pending',
+    is_profile_complete BOOLEAN DEFAULT false,
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -331,8 +336,12 @@ CREATE POLICY "Anyone can view active product variants" ON public.product_varian
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO public.users (id, email, full_name, avatar_url)
-    VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'avatar_url');
+    INSERT INTO public.users (id, email, full_name, avatar_url, user_type, account_status, is_profile_complete)
+    VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>
+'full_name
+', NEW.raw_user_meta_data->>
+'avatar_url
+', NULL, 'pending', false);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

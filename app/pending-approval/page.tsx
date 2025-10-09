@@ -19,10 +19,12 @@ export default function PendingApprovalPage() {
   };
 
   const getAccountTypeLabel = () => {
-    const accountType = user?.user_metadata?.account_type;
+    // Try to get from user metadata first, then fallback to user_type
+    const accountType = user?.user_metadata?.user_type || user?.user_metadata?.account_type;
     switch (accountType) {
       case 'candidate': return 'مرشح';
       case 'mp': return 'نائب';
+      case 'citizen': return 'مواطن';
       default: return 'مستخدم';
     }
   };
@@ -86,14 +88,14 @@ export default function PendingApprovalPage() {
               </h4>
               <div className="bg-blue-50 rounded-lg p-4">
                 <ul className="space-y-2 text-sm text-blue-800">
-                  {user?.user_metadata?.account_type === 'candidate' && (
+                  {(user?.user_metadata?.user_type === 'candidate' || user?.user_metadata?.account_type === 'candidate') && (
                     <>
                       <li>• التحقق من صحة البيانات الانتخابية</li>
                       <li>• مراجعة الوثائق المطلوبة</li>
                       <li>• التأكد من أهلية الترشح</li>
                     </>
                   )}
-                  {user?.user_metadata?.account_type === 'mp' && (
+                  {(user?.user_metadata?.user_type === 'mp' || user?.user_metadata?.account_type === 'mp') && (
                     <>
                       <li>• التحقق من عضوية البرلمان</li>
                       <li>• مراجعة الوثائق الرسمية</li>
