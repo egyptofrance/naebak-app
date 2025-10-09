@@ -35,19 +35,26 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
       const result = await signIn(data.email, data.password);
       
       if (result.success) {
+        console.log('Login successful, user metadata:', result.user?.user_metadata);
+        console.log('Needs account setup:', result.needsAccountSetup);
+        console.log('Needs profile completion:', result.needsProfileCompletion);
+        
         // فحص ما إذا كان المستخدم يحتاج لتحديد نوع الحساب
         if (result.needsAccountSetup) {
+          console.log('Redirecting to account setup');
           router.push('/auth/account-setup');
           return;
         }
         
         // فحص ما إذا كان المستخدم يحتاج لإكمال الملف الشخصي
         if (result.needsProfileCompletion) {
+          console.log('Redirecting to profile completion');
           router.push('/auth/profile-completion');
           return;
         }
         
         // إذا كان كل شيء جاهز، توجيه للصفحة المطلوبة أو لوحة التحكم
+        console.log('User is fully set up, redirecting to dashboard');
         router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
         router.refresh();
       } else {

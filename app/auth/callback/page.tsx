@@ -1,29 +1,63 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 
 export default function AuthCallback() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const handleAuthCallback = async () => {
       const supabase = createClient();
       
       try {
-        // Handle the auth callback
-        const { data, error } = await supabase.auth.getSession();
+        // Get the code from URL parameters
+        const code = searchParams.get('code');
         
-        if (error) {
-          console.error('Auth callback error:', error);
-          router.push('/auth/login?error=callback_error');
+        if (code) {
+          // Exchange the code for a session
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+          
+          if (error) {
+            console.error('Auth callback error:', error);
+            router.push('/auth/login?error=callback_error');
+            return;
+          }
+
+          if (data.session && data.user) {
+            console.log('Auth callback successful, user:', data.user);
+            
+            // Check if user needs account setup
+            const accountType = data.user.user_metadata?.account_type;
+            const profileCompleted = data.user.user_metadata?.profile_completed;
+            
+            if (!accountType) {
+              console.log('User needs account setup');
+              router.push('/auth/account-setup');
+            } else if (!profileCompleted) {
+              console.log('User needs profile completion');
+              router.push('/auth/profile-completion');
+            } else {
+              console.log('User is fully set up, redirecting to dashboard');
+              router.push('/dashboard');
+            }
+            return;
+          }
+        }
+        
+        // Fallback: try to get existing session
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error('Session error:', sessionError);
+          router.push('/auth/login?error=session_error');
           return;
         }
 
-        if (data.session) {
-          console.log('Auth callback successful, redirecting to account setup');
-          // Redirect to account setup after email confirmation
+        if (sessionData.session) {
+          console.log('Existing session found, redirecting to account setup');
           router.push('/auth/account-setup');
         } else {
           console.log('No session found, redirecting to login');
@@ -36,7 +70,7 @@ export default function AuthCallback() {
     };
 
     handleAuthCallback();
-  }, [router]);
+  }, [router, searchParams]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
