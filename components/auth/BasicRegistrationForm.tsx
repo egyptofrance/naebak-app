@@ -32,10 +32,13 @@ export default function BasicRegistrationForm({ onSuccess, onError }: BasicRegis
     setIsLoading(true);
     
     try {
-      const result = await signUp(data);
+      const result = await signUp(data.email, data.password, {});
       
       if (result.success) {
-        onSuccess(result.data);
+        onSuccess({ 
+          user: result.user, 
+          needsEmailConfirmation: !result.user 
+        });
       } else {
         onError(result.error || 'حدث خطأ أثناء إنشاء الحساب');
       }

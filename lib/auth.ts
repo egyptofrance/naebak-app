@@ -1,4 +1,5 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@/lib/supabase';
 
 const supabase = createClientComponentClient();
 
@@ -197,5 +198,148 @@ export async function getUserProfile(authId: string) {
     return { success: true, data };
   } catch (error: any) {
     return { success: false, error: error.message };
+  }
+}
+
+// Update user role (Step 3 of registration)
+export async function updateUserRole(data: any): Promise<{success: boolean, error?: string, data?: any}> {
+  try {
+    const supabase = createClient();
+    
+    // Get current user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+      return { success: false, error: 'المستخدم غير مسجل الدخول' };
+    }
+
+    // Get role ID from role name
+    const { data: roleData, error: roleError } = await supabase
+      .from('roles')
+      .select('id')
+      .eq('name', data.role)
+      .single();
+
+    if (roleError) {
+      return { success: false, error: 'الدور المحدد غير صحيح' };
+    }
+
+    // Update user's role
+    const { data: userData, error: updateError } = await supabase
+      .from('users')
+      .update({
+        role_id: roleData.id,
+        bio: data.bio || null,
+        updated_at: new Date().toISOString()
+      })
+      .eq('auth_id', user.id)
+      .select()
+      .single();
+
+    if (updateError) {
+      return { success: false, error: 'فشل في تحديث الدور' };
+    }
+
+    // If role is deputy or candidate, create additional profile
+    if (data.role === 'deputy' || data.role === 'candidate') {
+      const profileTable = data.role === 'deputy' ? 'deputy_profiles' : 'candidate_profiles';
+      
+      const { error: profileError } = await supabase
+        .from(profileTable)
+        .insert({
+          user_id: userData.id,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        });
+
+      if (profileError) {
+        console.warn('Failed to create additional profile:', profileError);
+      }
+    }
+
+    return { success: true, data: userData };
+  } catch (error) {
+    return { success: false, error: 'حدث خطأ غير متوقع' };
+  }
+}
+
+// Get all governorates
+export async function getGovernorates(): Promise<{success: boolean, error?: string, data?: any[]}> {
+  try {
+    const supabase = createClient();
+    
+    const { data, error } = await supabase
+      .from('governorates')
+      .select('id, name')
+      .order('name');
+
+    if (error) {
+      return { success: false, error: 'فشل في تحميل المحافظات' };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, error: 'حدث خطأ أثناء تحميل المحافظات' };
+  }
+}
+
+// Get constituencies for a specific governorate
+export async function getConstituencies(governorateId: number): Promise<{success: boolean, error?: string, data?: any[]}> {
+  try {
+    const supabase = createClient();
+    
+    const { data, error } = await supabase
+      .from('constituencies')
+      .select('id, name')
+      .eq('governorate_id', governorateId)
+      .order('name');
+
+    if (error) {
+      return { success: false, error: 'فشل في تحميل الدوائر الانتخابية' };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, error: 'حدث خطأ أثناء تحميل الدوائر الانتخابية' };
+  }
+}
+
+// Complete user profile (Step 2 of registration) - Updated function
+export async function completeProfile(data: any): Promise<{success: boolean, error?: string, data?: any}> {
+  try {
+    const supabase = createClient();
+    
+    // Get current user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+      return { success: false, error: 'المستخدم غير مسجل الدخول' };
+    }
+
+    // Update user profile
+    const { data: userData, error: updateError } = await supabase
+      .from('users')
+      .update({
+        first_name: data.firstName,
+        last_name: data.lastName,
+        phone: data.phone,
+        national_id: data.nationalId,
+        gender: data.gender,
+        dob: data.dateOfBirth,
+        governorate_id: data.governorateId,
+        constituency_id: data.constituencyId,
+        updated_at: new Date().toISOString()
+      })
+      .eq('auth_id', user.id)
+      .select()
+      .single();
+
+    if (updateError) {
+      return { success: false, error: 'فشل في تحديث الملف الشخصي' };
+    }
+
+    return { success: true, data: userData };
+  } catch (error) {
+    return { success: false, error: 'حدث خطأ غير متوقع' };
   }
 }

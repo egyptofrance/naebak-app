@@ -31,7 +31,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
     setError('');
     
     try {
-      const result = await signIn(data);
+      const result = await signIn(data.email, data.password);
       
       if (result.success) {
         // Redirect to the specified page or dashboard
