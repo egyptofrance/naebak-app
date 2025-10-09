@@ -12,12 +12,16 @@ interface LayoutWrapperProps {
   newsSpeedSeconds: number;
 }
 
+// تحديد الصفحات التي لا تعرض البانر والشريط الإخباري
 const isControlPanelPage = (pathname: string) => {
   return pathname.startsWith('/dashboard') ||
          pathname.startsWith('/admin') ||
          pathname.startsWith('/citizen') ||
          pathname.startsWith('/mp') ||
-         pathname.startsWith('/candidate');
+         pathname.startsWith('/candidate') ||
+         pathname.startsWith('/auth/login') ||
+         pathname.startsWith('/auth/register') ||
+         pathname.startsWith('/auth/');
 };
 
 const getBannerPageType = (pathname: string): 'landing' | 'candidates' | 'mps' | 'complaints' => {

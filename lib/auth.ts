@@ -11,19 +11,19 @@ export async function signIn(email: string, password: string) {
     });
 
     if (error) {
-      console.error('SignUp error:', error);
+      console.error('SignIn error:', error);
       
-      // معالجة أخطاء محددة من Supabase
-      if (error.message.includes('User already registered')) {
-        return { success: false, error: 'هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.' };
+      // معالجة أخطاء محددة من Supabase لتسجيل الدخول
+      if (error.message.includes('Invalid login credentials') || error.message.includes('Invalid email or password')) {
+        return { success: false, error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى التحقق من البيانات والمحاولة مرة أخرى.' };
+      } else if (error.message.includes('Email not confirmed')) {
+        return { success: false, error: 'يرجى تأكيد بريدك الإلكتروني أولاً من خلال الرابط المرسل إليك.' };
+      } else if (error.message.includes('Too many requests')) {
+        return { success: false, error: 'تم تجاوز عدد المحاولات المسموح. يرجى المحاولة لاحقاً.' };
       } else if (error.message.includes('Invalid email')) {
         return { success: false, error: 'البريد الإلكتروني غير صحيح. يرجى التحقق من صحة البريد الإلكتروني.' };
-      } else if (error.message.includes('Password should be at least')) {
-        return { success: false, error: 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل.' };
-      } else if (error.message.includes('Signup is disabled')) {
-        return { success: false, error: 'التسجيل معطل حالياً. يرجى المحاولة لاحقاً.' };
       } else {
-        return { success: false, error: `خطأ في التسجيل: ${error.message}` };
+        return { success: false, error: `خطأ في تسجيل الدخول: ${error.message}` };
       }
     }
 
@@ -49,15 +49,17 @@ export async function signUp(email: string, password: string, userData: any) {
     if (error) {
       console.error('SignUp error:', error);
       
-      // معالجة أخطاء محددة من Supabase
-      if (error.message.includes('User already registered')) {
+      // معالجة أخطاء محددة من Supabase للتسجيل
+      if (error.message.includes('User already registered') || error.message.includes('already been registered')) {
         return { success: false, error: 'هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.' };
-      } else if (error.message.includes('Invalid email')) {
+      } else if (error.message.includes('Invalid email') || error.message.includes('Unable to validate email address')) {
         return { success: false, error: 'البريد الإلكتروني غير صحيح. يرجى التحقق من صحة البريد الإلكتروني.' };
-      } else if (error.message.includes('Password should be at least')) {
-        return { success: false, error: 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل.' };
+      } else if (error.message.includes('Password should be at least') || error.message.includes('Password is too weak')) {
+        return { success: false, error: 'كلمة المرور ضعيفة. يجب أن تكون 8 أحرف على الأقل وتحتوي على أحرف وأرقام.' };
       } else if (error.message.includes('Signup is disabled')) {
         return { success: false, error: 'التسجيل معطل حالياً. يرجى المحاولة لاحقاً.' };
+      } else if (error.message.includes('rate limit')) {
+        return { success: false, error: 'تم تجاوز عدد المحاولات المسموح. يرجى المحاولة لاحقاً.' };
       } else {
         return { success: false, error: `خطأ في التسجيل: ${error.message}` };
       }
@@ -104,15 +106,17 @@ export async function signOut() {
     if (error) {
       console.error('SignUp error:', error);
       
-      // معالجة أخطاء محددة من Supabase
-      if (error.message.includes('User already registered')) {
+      // معالجة أخطاء محددة من Supabase للتسجيل
+      if (error.message.includes('User already registered') || error.message.includes('already been registered')) {
         return { success: false, error: 'هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.' };
-      } else if (error.message.includes('Invalid email')) {
+      } else if (error.message.includes('Invalid email') || error.message.includes('Unable to validate email address')) {
         return { success: false, error: 'البريد الإلكتروني غير صحيح. يرجى التحقق من صحة البريد الإلكتروني.' };
-      } else if (error.message.includes('Password should be at least')) {
-        return { success: false, error: 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل.' };
+      } else if (error.message.includes('Password should be at least') || error.message.includes('Password is too weak')) {
+        return { success: false, error: 'كلمة المرور ضعيفة. يجب أن تكون 8 أحرف على الأقل وتحتوي على أحرف وأرقام.' };
       } else if (error.message.includes('Signup is disabled')) {
         return { success: false, error: 'التسجيل معطل حالياً. يرجى المحاولة لاحقاً.' };
+      } else if (error.message.includes('rate limit')) {
+        return { success: false, error: 'تم تجاوز عدد المحاولات المسموح. يرجى المحاولة لاحقاً.' };
       } else {
         return { success: false, error: `خطأ في التسجيل: ${error.message}` };
       }
