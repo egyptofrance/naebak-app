@@ -11,18 +11,13 @@ import { signUp } from '@/lib/auth';
 // Schema للتحقق من صحة البيانات
 const simpleRegistrationSchema = z.object({
   email: z.string().email('البريد الإلكتروني غير صحيح'),
-  password: z.string().min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'),
-  confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "كلمة المرور غير متطابقة",
-  path: ["confirmPassword"],
+  password: z.string().min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل')
 });
 
 type SimpleRegistrationData = z.infer<typeof simpleRegistrationSchema>;
 
 export default function SimpleRegistrationForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -160,41 +155,6 @@ export default function SimpleRegistrationForm() {
               </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-              )}
-            </div>
-
-            {/* تأكيد كلمة المرور */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                تأكيد كلمة المرور *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  {...register('confirmPassword')}
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  className={`block w-full pr-10 pl-10 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004705] focus:border-transparent ${
-                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                  placeholder="أعد إدخال كلمة المرور"
-                  dir="ltr"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 left-0 pl-3 flex items-center"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
-                </button>
-              </div>
-              {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
               )}
             </div>
           </div>
