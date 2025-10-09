@@ -56,6 +56,13 @@ export default function LayoutWrapper({
 
   // Determine if banner and news bar should be shown
   const showBannerAndNewsBar = !isControlPanelPage(pathname);
+  
+  // Debug logging
+  console.log('LayoutWrapper Debug:', {
+    pathname,
+    isControlPanel: isControlPanelPage(pathname),
+    showBannerAndNewsBar
+  });
 
   // Determine page type for Banner based on pathname
   const bannerPageType = getBannerPageType(pathname);
