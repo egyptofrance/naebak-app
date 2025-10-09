@@ -13,15 +13,27 @@ interface LayoutWrapperProps {
 }
 
 // تحديد الصفحات التي لا تعرض البانر والشريط الإخباري
+// تم التحديث: إخفاء البانر من صفحات التسجيل وتسجيل الدخول
 const isControlPanelPage = (pathname: string) => {
-  return pathname.startsWith('/dashboard') ||
-         pathname.startsWith('/admin') ||
-         pathname.startsWith('/citizen') ||
-         pathname.startsWith('/mp') ||
-         pathname.startsWith('/candidate') ||
-         pathname.startsWith('/auth/login') ||
-         pathname.startsWith('/auth/register') ||
-         pathname.startsWith('/auth/');
+  const isAuthPage = pathname.includes('/auth/');
+  const isDashboard = pathname.startsWith('/dashboard');
+  const isAdmin = pathname.startsWith('/admin');
+  const isCitizen = pathname.startsWith('/citizen');
+  const isMP = pathname.startsWith('/mp');
+  const isCandidate = pathname.startsWith('/candidate');
+  
+  console.log('🔍 Page Check:', {
+    pathname,
+    isAuthPage,
+    isDashboard,
+    isAdmin,
+    isCitizen,
+    isMP,
+    isCandidate,
+    shouldHideBanner: isAuthPage || isDashboard || isAdmin || isCitizen || isMP || isCandidate
+  });
+  
+  return isAuthPage || isDashboard || isAdmin || isCitizen || isMP || isCandidate;
 };
 
 const getBannerPageType = (pathname: string): 'landing' | 'candidates' | 'mps' | 'complaints' => {
