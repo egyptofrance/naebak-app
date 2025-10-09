@@ -8,7 +8,7 @@ import { basicRegistrationSchema, type BasicRegistrationData } from '@/lib/valid
 import { signUp } from '@/lib/auth';
 
 interface BasicRegistrationFormProps {
-  onSuccess: (data: { user: any; needsEmailConfirmation: boolean }) => void;
+  onSuccess: (data: { user: any; session?: any; needsEmailConfirmation: boolean }) => void;
   onError: (error: string) => void;
 }
 
@@ -37,7 +37,8 @@ export default function BasicRegistrationForm({ onSuccess, onError }: BasicRegis
       if (result.success) {
         onSuccess({ 
           user: result.user, 
-          needsEmailConfirmation: !result.user 
+          session: result.session,
+          needsEmailConfirmation: result.needsEmailConfirmation || false
         });
       } else {
         onError(result.error || 'حدث خطأ أثناء إنشاء الحساب');

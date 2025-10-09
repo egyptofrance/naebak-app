@@ -47,10 +47,14 @@ export default function RegistrationWizard() {
     if (currentStep === 1) {
       if (stepData.needsEmailConfirmation) {
         setSuccess('تم إرسال رابط التحقق إلى بريدك الإلكتروني. يرجى التحقق من بريدك الإلكتروني قبل المتابعة.');
-        // In a real app, you might want to show a different UI here
-        // For now, we'll proceed to the next step
+        // إذا كان المستخدم يحتاج تأكيد البريد، انتظر قليلاً ثم انتقل للخطوة التالية
+        setTimeout(() => {
+          setCurrentStep(2);
+        }, 2000);
+      } else {
+        // إذا كان لديه session صالحة، انتقل مباشرة للخطوة التالية
+        setCurrentStep(2);
       }
-      setCurrentStep(2);
     } else if (currentStep === 2) {
       setCurrentStep(3);
     } else if (currentStep === 3) {

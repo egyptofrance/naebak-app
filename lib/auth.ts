@@ -27,7 +27,8 @@ export async function signUp(email: string, password: string, userData: any) {
       email,
       password,
       options: {
-        data: userData
+        data: userData,
+        emailRedirectTo: `${window.location.origin}/auth/callback`
       }
     });
 
@@ -35,7 +36,32 @@ export async function signUp(email: string, password: string, userData: any) {
       return { success: false, error: error.message };
     }
 
-    return { success: true, user: data.user };
+    // إنشاء سجل المستخدم في جدول users إذا تم إنشاء المستخدم بنجاح
+    if (data.user) {
+      try {
+        const { error: userError } = await supabase
+          .from('users')
+          .insert({
+            auth_id: data.user.id,
+            email: email,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          });
+
+        if (userError) {
+          console.warn('Failed to create user record:', userError);
+        }
+      } catch (insertError) {
+        console.warn('Error creating user record:', insertError);
+      }
+    }
+
+    return { 
+      success: true, 
+      user: data.user,
+      session: data.session,
+      needsEmailConfirmation: !data.session // إذا لم يكن هناك session، فالمستخدم يحتاج تأكيد البريد
+    };
   } catch (error) {
     return { success: false, error: 'حدث خطأ أثناء إنشاء الحساب' };
   }
@@ -311,34 +337,98 @@ export async function completeProfile(data: any): Promise<{success: boolean, err
     // Get current user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     
-    if (userError || !user) {
-      return { success: false, error: 'المستخدم غير مسجل الدخول' };
+    if (userError) {
+      console.error('Auth error:', userError);
+      return { success: false, error: 'خطأ في التحقق من المصادقة: ' + userError.message };
+    }
+    
+    if (!user) {
+      return { success: false, error: 'المستخدم غير مسجل الدخول. يرجى تسجيل الدخول أولاً.' };
     }
 
-    // Update user profile
-    const { data: userData, error: updateError } = await supabase
-      .from('users')
-      .update({
-        first_name: data.firstName,
-        last_name: data.lastName,
-        phone: data.phone,
+    // Get session separately
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    
+    if (sessionError) {
+      console.error('Session error:', sessionError);
+      return { success: false, error: 'خطأ في جلسة المستخدم: ' + sessionError.message };
+    }
 
-        gender: data.gender,
-        dob: data.dateOfBirth,
-        governorate_id: data.governorateId,
-        constituency_id: data.constituencyId,
-        updated_at: new Date().toISOString()
-      })
+    if (!session) {
+      return { success: false, error: 'جلسة المستخدم منتهية الصلاحية. يرجى تسجيل الدخول مرة أخرى.' };
+    }
+
+    console.log('Updating profile for user:', user.id);
+
+    // Check if user exists in users table
+    const { data: existingUser, error: checkError } = await supabase
+      .from('users')
+      .select('id, auth_id')
       .eq('auth_id', user.id)
-      .select()
       .single();
 
-    if (updateError) {
-      return { success: false, error: 'فشل في تحديث الملف الشخصي' };
+    if (checkError && checkError.code !== 'PGRST116') { // PGRST116 = no rows returned
+      console.error('Error checking user:', checkError);
+      return { success: false, error: 'خطأ في التحقق من بيانات المستخدم' };
+    }
+
+    let userData;
+
+    if (existingUser) {
+      // Update existing user
+      const { data: updatedUser, error: updateError } = await supabase
+        .from('users')
+        .update({
+          first_name: data.firstName,
+          last_name: data.lastName,
+          phone: data.phone,
+          gender: data.gender,
+          dob: data.dateOfBirth,
+          governorate_id: data.governorateId,
+          constituency: data.constituency, // استخدام constituency بدلاً من constituency_id
+          updated_at: new Date().toISOString()
+        })
+        .eq('auth_id', user.id)
+        .select()
+        .single();
+
+      if (updateError) {
+        console.error('Update error:', updateError);
+        return { success: false, error: 'فشل في تحديث الملف الشخصي: ' + updateError.message };
+      }
+
+      userData = updatedUser;
+    } else {
+      // Create new user record
+      const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert({
+          auth_id: user.id,
+          email: user.email,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          phone: data.phone,
+          gender: data.gender,
+          dob: data.dateOfBirth,
+          governorate_id: data.governorateId,
+          constituency: data.constituency,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error('Insert error:', insertError);
+        return { success: false, error: 'فشل في إنشاء الملف الشخصي: ' + insertError.message };
+      }
+
+      userData = newUser;
     }
 
     return { success: true, data: userData };
-  } catch (error) {
-    return { success: false, error: 'حدث خطأ غير متوقع' };
+  } catch (error: any) {
+    console.error('Unexpected error in completeProfile:', error);
+    return { success: false, error: 'حدث خطأ غير متوقع: ' + (error.message || 'خطأ غير معروف') };
   }
 }
