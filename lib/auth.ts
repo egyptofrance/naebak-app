@@ -38,13 +38,21 @@ export async function signIn(email: string, password: string) {
   });
 
   if (error) {
-    // Supabase يتولى جميع التحققات تلقائياً
+    console.error('SignIn error:', error);
     return { success: false, error: error.message };
   }
 
   if (data.user) {
+    console.log('SignIn successful, user data:', data.user);
+    console.log('User metadata:', data.user.user_metadata);
+    
     const accountType = data.user.user_metadata?.account_type;
     const profileCompleted = data.user.user_metadata?.profile_completed;
+    
+    console.log('Account type:', accountType);
+    console.log('Profile completed:', profileCompleted);
+    console.log('Needs account setup:', !accountType);
+    console.log('Needs profile completion:', accountType && !profileCompleted);
 
     return { 
       success: true, 

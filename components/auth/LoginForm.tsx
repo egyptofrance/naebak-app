@@ -42,21 +42,28 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
         // فحص ما إذا كان المستخدم يحتاج لتحديد نوع الحساب
         if (result.needsAccountSetup) {
           console.log('Redirecting to account setup');
-          router.push('/auth/account-setup');
+          // تأخير قصير للتأكد من تحديث الحالة
+          setTimeout(() => {
+            router.push('/auth/account-setup');
+          }, 100);
           return;
         }
         
         // فحص ما إذا كان المستخدم يحتاج لإكمال الملف الشخصي
         if (result.needsProfileCompletion) {
           console.log('Redirecting to profile completion');
-          router.push('/auth/profile-completion');
+          setTimeout(() => {
+            router.push('/auth/profile-completion');
+          }, 100);
           return;
         }
         
         // إذا كان كل شيء جاهز، توجيه للصفحة المطلوبة أو لوحة التحكم
         console.log('User is fully set up, redirecting to dashboard');
-        router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
-        router.refresh();
+        setTimeout(() => {
+          router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
+          router.refresh();
+        }, 100);
       } else {
         setError(result.error || 'حدث خطأ أثناء تسجيل الدخول');
       }
