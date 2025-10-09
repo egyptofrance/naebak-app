@@ -1,204 +1,323 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getCurrentUser } from '@/lib/auth';
+import { useState } from 'react';
+import { 
+  User, 
+  FileText, 
+  Calendar, 
+  Trophy, 
+  Users, 
+  MessageSquare, 
+  Settings,
+  Plus,
+  Edit,
+  Eye,
+  BarChart3
+} from 'lucide-react';
+import Link from 'next/link';
 
 interface User {
   id: string;
   email?: string;
   user_metadata: {
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
+    firstName?: string;
+    lastName?: string;
     account_type?: string;
+    phone?: string;
+    governorate?: string;
+    city?: string;
+    job?: string;
+    party?: string;
+    electoralSymbol?: string;
+    electoralNumber?: string;
   };
 }
 
-export default function CandidateDashboard() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+interface CandidateDashboardProps {
+  user: User;
+}
 
-  useEffect(() => {
-    const loadUser = async () => {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-      setLoading(false);
-    };
+export default function CandidateDashboard({ user }: CandidateDashboardProps) {
+  const [activeTab, setActiveTab] = useState('overview');
 
-    loadUser();
-  }, []);
+  const fullName = `${user.user_metadata?.firstName || ''} ${user.user_metadata?.lastName || ''}`.trim();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">جاري التحميل...</p>
-        </div>
-      </div>
-    );
-  }
+  const stats = [
+    {
+      title: 'المتابعون',
+      value: '1,234',
+      icon: Users,
+      color: 'bg-blue-500',
+      change: '+12%',
+    },
+    {
+      title: 'المشاهدات',
+      value: '5,678',
+      icon: Eye,
+      color: 'bg-green-500',
+      change: '+8%',
+    },
+    {
+      title: 'التفاعلات',
+      value: '890',
+      icon: MessageSquare,
+      color: 'bg-purple-500',
+      change: '+15%',
+    },
+    {
+      title: 'الفعاليات',
+      value: '12',
+      icon: Calendar,
+      color: 'bg-orange-500',
+      change: '+3',
+    },
+  ];
 
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600">خطأ في تحميل بيانات المستخدم</p>
-        </div>
-      </div>
-    );
-  }
+  const quickActions = [
+    {
+      title: 'إضافة منشور جديد',
+      description: 'شارك آخر أخبارك مع المتابعين',
+      icon: Plus,
+      href: '/dashboard/posts/new',
+      color: 'bg-blue-50 hover:bg-blue-100 border-blue-200',
+    },
+    {
+      title: 'تحديث البرنامج الانتخابي',
+      description: 'عدّل برنامجك الانتخابي',
+      icon: Edit,
+      href: '/dashboard/program',
+      color: 'bg-green-50 hover:bg-green-100 border-green-200',
+    },
+    {
+      title: 'إضافة فعالية',
+      description: 'أنشئ فعالية أو مناسبة جديدة',
+      icon: Calendar,
+      href: '/dashboard/events/new',
+      color: 'bg-purple-50 hover:bg-purple-100 border-purple-200',
+    },
+    {
+      title: 'عرض الإحصائيات',
+      description: 'تابع أداء حملتك الانتخابية',
+      icon: BarChart3,
+      href: '/dashboard/analytics',
+      color: 'bg-orange-50 hover:bg-orange-100 border-orange-200',
+    },
+  ];
+
+  const recentActivities = [
+    {
+      type: 'post',
+      title: 'نشر منشور جديد: "رؤيتي للتعليم"',
+      time: 'منذ ساعتين',
+      icon: FileText,
+    },
+    {
+      type: 'event',
+      title: 'إضافة فعالية: لقاء مع الشباب',
+      time: 'منذ 4 ساعات',
+      icon: Calendar,
+    },
+    {
+      type: 'follower',
+      title: 'انضم 15 متابع جديد',
+      time: 'منذ 6 ساعات',
+      icon: Users,
+    },
+    {
+      type: 'achievement',
+      title: 'تحديث الإنجازات',
+      time: 'أمس',
+      icon: Trophy,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                مرحباً، {user.user_metadata.first_name} {user.user_metadata.last_name}
+                مرحباً، {fullName || 'المرشح'}
               </h1>
-              <p className="text-gray-600">لوحة تحكم المرشح</p>
+              <p className="text-gray-600">
+                {user.user_metadata?.party} - {user.user_metadata?.governorate}
+              </p>
             </div>
-            <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-              مرشح
-            </div>
-          </div>
-        </div>
-
-        {/* Campaign Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-3 rounded-full bg-green-100 text-green-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">المؤيدين</p>
-                <p className="text-2xl font-semibold text-gray-900">1,247</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-3 rounded-full bg-blue-100 text-blue-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">الرسائل الواردة</p>
-                <p className="text-2xl font-semibold text-gray-900">23</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">الوعود المنشورة</p>
-                <p className="text-2xl font-semibold text-gray-900">12</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-3 rounded-full bg-purple-100 text-purple-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">نسبة التأييد</p>
-                <p className="text-2xl font-semibold text-gray-900">67%</p>
+            <div className="flex items-center space-x-4 space-x-reverse">
+              <Link
+                href="/dashboard/settings"
+                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <Settings className="h-6 w-6" />
+              </Link>
+              <div className="h-8 w-8 bg-[#004705] rounded-full flex items-center justify-center">
+                <User className="h-5 w-5 text-white" />
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Campaign Management */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">إدارة الحملة الانتخابية</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <button className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="p-3 rounded-full bg-green-100 text-green-600 mb-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <div key={index} className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className={`${stat.color} p-3 rounded-lg`}>
+                    <Icon className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="mr-4">
+                    <p className="text-sm font-medium text-gray-600">{stat.title}</p>
+                    <div className="flex items-center">
+                      <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                      <span className="text-sm text-green-600 mr-2">{stat.change}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span className="text-sm font-medium text-gray-900">تحديث الوعود</span>
-            </button>
-
-            <button className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="p-3 rounded-full bg-blue-100 text-blue-600 mb-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <span className="text-sm font-medium text-gray-900">الرد على الرسائل</span>
-            </button>
-
-            <button className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="p-3 rounded-full bg-yellow-100 text-yellow-600 mb-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4 19h6v-2H4v2zM16 3H4v2h12V3zM4 7h12v2H4V7zM4 11h12v2H4v-2z" />
-                </svg>
-              </div>
-              <span className="text-sm font-medium text-gray-900">نشر إعلان</span>
-            </button>
-
-            <button className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="p-3 rounded-full bg-purple-100 text-purple-600 mb-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <span className="text-sm font-medium text-gray-900">تقارير الحملة</span>
-            </button>
-          </div>
+            );
+          })}
         </div>
 
-        {/* Recent Messages */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">الرسائل الأخيرة من المؤيدين</h2>
-          <div className="space-y-4">
-            <div className="border-l-4 border-blue-500 pl-4 py-2">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-medium text-gray-900">أحمد محمد</p>
-                  <p className="text-sm text-gray-600">أتمنى لك التوفيق في الانتخابات القادمة</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Quick Actions */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">الإجراءات السريعة</h2>
+              </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {quickActions.map((action, index) => {
+                    const Icon = action.icon;
+                    return (
+                      <Link
+                        key={index}
+                        href={action.href}
+                        className={`p-4 border-2 rounded-lg transition-colors ${action.color}`}
+                      >
+                        <div className="flex items-start">
+                          <Icon className="h-6 w-6 text-gray-700 mt-1" />
+                          <div className="mr-3">
+                            <h3 className="font-medium text-gray-900">{action.title}</h3>
+                            <p className="text-sm text-gray-600 mt-1">{action.description}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
-                <span className="text-xs text-gray-500">منذ ساعتين</span>
               </div>
             </div>
-            
-            <div className="border-l-4 border-green-500 pl-4 py-2">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-medium text-gray-900">فاطمة علي</p>
-                  <p className="text-sm text-gray-600">ما هي خطتك لتحسين التعليم في المنطقة؟</p>
+
+            {/* Campaign Progress */}
+            <div className="bg-white rounded-lg shadow mt-6">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">تقدم الحملة الانتخابية</h2>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">البرنامج الانتخابي</span>
+                      <span className="text-gray-900">85%</span>
+                    </div>
+                    <div className="mt-1 bg-gray-200 rounded-full h-2">
+                      <div className="bg-[#004705] h-2 rounded-full" style={{ width: '85%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">الإنجازات</span>
+                      <span className="text-gray-900">60%</span>
+                    </div>
+                    <div className="mt-1 bg-gray-200 rounded-full h-2">
+                      <div className="bg-blue-500 h-2 rounded-full" style={{ width: '60%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">المناسبات والفعاليات</span>
+                      <span className="text-gray-900">40%</span>
+                    </div>
+                    <div className="mt-1 bg-gray-200 rounded-full h-2">
+                      <div className="bg-purple-500 h-2 rounded-full" style={{ width: '40%' }}></div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-xs text-gray-500">منذ 4 ساعات</span>
               </div>
             </div>
-            
-            <div className="border-l-4 border-yellow-500 pl-4 py-2">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-medium text-gray-900">محمد حسن</p>
-                  <p className="text-sm text-gray-600">نحتاج لمزيد من المشاريع التنموية</p>
+          </div>
+
+          {/* Recent Activities */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">النشاطات الأخيرة</h2>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  {recentActivities.map((activity, index) => {
+                    const Icon = activity.icon;
+                    return (
+                      <div key={index} className="flex items-start">
+                        <div className="bg-gray-100 p-2 rounded-lg">
+                          <Icon className="h-4 w-4 text-gray-600" />
+                        </div>
+                        <div className="mr-3 flex-1">
+                          <p className="text-sm font-medium text-gray-900">{activity.title}</p>
+                          <p className="text-xs text-gray-500">{activity.time}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <span className="text-xs text-gray-500">أمس</span>
+              </div>
+            </div>
+
+            {/* Profile Summary */}
+            <div className="bg-white rounded-lg shadow mt-6">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">ملخص الملف الشخصي</h2>
+              </div>
+              <div className="p-6">
+                <div className="space-y-3">
+                  <div>
+                    <span className="text-sm text-gray-600">الاسم:</span>
+                    <p className="font-medium">{fullName}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm text-gray-600">المحافظة:</span>
+                    <p className="font-medium">{user.user_metadata?.governorate}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm text-gray-600">الحزب:</span>
+                    <p className="font-medium">{user.user_metadata?.party}</p>
+                  </div>
+                  {user.user_metadata?.electoralSymbol && (
+                    <div>
+                      <span className="text-sm text-gray-600">الرمز الانتخابي:</span>
+                      <p className="font-medium">{user.user_metadata.electoralSymbol}</p>
+                    </div>
+                  )}
+                  {user.user_metadata?.electoralNumber && (
+                    <div>
+                      <span className="text-sm text-gray-600">الرقم الانتخابي:</span>
+                      <p className="font-medium">{user.user_metadata.electoralNumber}</p>
+                    </div>
+                  )}
+                </div>
+                <Link
+                  href="/dashboard/profile"
+                  className="mt-4 block w-full text-center py-2 px-4 border border-[#004705] text-[#004705] rounded-lg hover:bg-[#004705] hover:text-white transition-colors"
+                >
+                  عرض الملف الكامل
+                </Link>
               </div>
             </div>
           </div>

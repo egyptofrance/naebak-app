@@ -66,6 +66,7 @@ export async function middleware(req: NextRequest) {
   const publicRoutes = [
     '/',
     '/auth/login',
+    '/auth/register',
     '/auth/forgot-password',
     '/auth/reset-password',
     '/auth/callback',
@@ -82,13 +83,39 @@ export async function middleware(req: NextRequest) {
 
   // If user is authenticated
   if (session?.user) {
-    // منع الوصول لصفحات المصادقة إذا كان مسجل دخول
-    if (path.startsWith('/auth/') && !path.startsWith('/auth/logout')) {
-      return NextResponse.redirect(new URL('/', req.url));
+    const user = session.user;
+    const accountType = user.user_metadata?.account_type;
+    const profileCompleted = user.user_metadata?.profile_completed || false;
+
+    // إذا لم يحدد المستخدم نوع حسابه بعد
+    if (!accountType && !path.startsWith('/auth/account-setup')) {
+      // استثناءات: السماح بالوصول لصفحات معينة
+      const allowedPaths = ['/auth/logout', '/api', '/_next', '/favicon.ico'];
+      const isAllowedPath = allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+      
+      if (!isAllowedPath) {
+        return NextResponse.redirect(new URL('/auth/account-setup', req.url));
+      }
+    }
+
+    // إذا حدد نوع الحساب ولكن لم يكمل ملفه الشخصي
+    if (accountType && !profileCompleted && !path.startsWith('/auth/profile-completion')) {
+      // استثناءات: السماح بالوصول لصفحات معينة
+      const allowedPaths = ['/auth/logout', '/api', '/_next', '/favicon.ico'];
+      const isAllowedPath = allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+      
+      if (!isAllowedPath) {
+        return NextResponse.redirect(new URL('/auth/profile-completion', req.url));
+      }
+    }
+
+    // منع الوصول لصفحات المصادقة إذا كان مسجل دخول ومكتمل الملف الشخصي
+    if (accountType && profileCompleted && path.startsWith('/auth/') && !path.startsWith('/auth/logout')) {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
     }
   } else {
     // إذا لم يكن مسجل دخول، منع الوصول للصفحات المحمية
-    const protectedPaths = ['/dashboard', '/profile'];
+    const protectedPaths = ['/dashboard', '/profile', '/auth/account-setup', '/auth/profile-completion'];
     const isProtectedPath = protectedPaths.some(protectedPath => path.startsWith(protectedPath));
     
     if (isProtectedPath) {

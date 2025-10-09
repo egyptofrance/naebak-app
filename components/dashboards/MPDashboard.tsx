@@ -1,53 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getCurrentUser } from '@/lib/auth';
+import { useState } from 'react';
 
 interface User {
   id: string;
   email?: string;
   user_metadata: {
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
+    firstName?: string;
+    lastName?: string;
     account_type?: string;
+    phone?: string;
+    governorate?: string;
+    city?: string;
+    job?: string;
+    party?: string;
+    electoralSymbol?: string;
+    electoralNumber?: string;
   };
 }
 
-export default function MPDashboard() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+interface MPDashboardProps {
+  user: User;
+}
 
-  useEffect(() => {
-    const loadUser = async () => {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-      setLoading(false);
-    };
-
-    loadUser();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">جاري التحميل...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600">خطأ في تحميل بيانات المستخدم</p>
-        </div>
-      </div>
-    );
-  }
+export default function MPDashboard({ user }: MPDashboardProps) {
+  const fullName = `${user.user_metadata?.firstName || ''} ${user.user_metadata?.lastName || ''}`.trim();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -57,7 +34,7 @@ export default function MPDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                مرحباً، النائب {user.user_metadata.first_name} {user.user_metadata.last_name}
+                مرحباً، النائب {fullName}
               </h1>
               <p className="text-gray-600">لوحة تحكم عضو مجلس النواب</p>
             </div>

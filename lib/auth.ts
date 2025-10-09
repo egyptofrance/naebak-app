@@ -2,6 +2,59 @@ import { createClient } from '@/lib/supabase';
 
 const supabase = createClient();
 
+// تسجيل حساب جديد
+export async function signUp(email: string, password: string, metadata: any = {}) {
+  try {
+    // إنشاء حساب جديد - Supabase سيتولى فحص وجود المستخدم تلقائياً
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          ...metadata,
+          created_at: new Date().toISOString(),
+          account_type: null, // سيتم تحديده لاحقاً
+          profile_completed: false
+        },
+        emailRedirectTo: `${window.location.origin}/auth/account-setup`
+      }
+    });
+
+    if (error) {
+      console.error('SignUp error:', error);
+      
+      // معالجة أخطاء محددة من Supabase للتسجيل
+      if (error.message.includes('User already registered') || error.message.includes('already been registered')) {
+        return { success: false, error: 'هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.' };
+      } else if (error.message.includes('Invalid email') || error.message.includes('Unable to validate email address')) {
+        return { success: false, error: 'البريد الإلكتروني غير صحيح. يرجى التحقق من صحة البريد الإلكتروني.' };
+      } else if (error.message.includes('Password should be at least') || error.message.includes('Password is too weak')) {
+        return { success: false, error: 'كلمة المرور ضعيفة. يجب أن تكون 8 أحرف على الأقل وتحتوي على أحرف وأرقام.' };
+      } else if (error.message.includes('Signup is disabled')) {
+        return { success: false, error: 'التسجيل معطل حالياً. يرجى المحاولة لاحقاً.' };
+      } else if (error.message.includes('rate limit')) {
+        return { success: false, error: 'تم تجاوز عدد المحاولات المسموح. يرجى المحاولة لاحقاً.' };
+      } else {
+        return { success: false, error: `خطأ في التسجيل: ${error.message}` };
+      }
+    }
+
+    if (data.user) {
+      return { 
+        success: true, 
+        user: data.user,
+        session: data.session,
+        needsEmailConfirmation: !data.session // إذا لم تكن هناك جلسة، فهذا يعني أن التأكيد مطلوب
+      };
+    }
+
+    return { success: false, error: 'فشل في إنشاء الحساب' };
+  } catch (error: any) {
+    console.error('Unexpected signup error:', error);
+    return { success: false, error: 'حدث خطأ غير متوقع أثناء إنشاء الحساب' };
+  }
+}
+
 // تسجيل الدخول
 export async function signIn(email: string, password: string) {
   try {
@@ -28,30 +81,83 @@ export async function signIn(email: string, password: string) {
     }
 
     if (data.user) {
-      // فحص نوع المستخدم من قاعدة البيانات
-      const { data: userData, error: userError } = await supabase
-        .from('user_profiles')
-        .select('user_type, account_status, is_profile_complete')
-        .eq('id', data.user.id)
-        .single();
-
-      if (userError) {
-        console.error('Error fetching user data:', userError);
-        return { success: false, error: 'حدث خطأ أثناء جلب بيانات المستخدم' };
-      }
+      // فحص ما إذا كان المستخدم يحتاج لتحديد نوع الحساب
+      const accountType = data.user.user_metadata?.account_type;
+      const profileCompleted = data.user.user_metadata?.profile_completed;
 
       return { 
         success: true, 
         user: data.user,
-        userData: userData,
-        needsUserTypeSelection: !userData.user_type,
-        needsApproval: userData.user_type && userData.account_status === 'pending'
+        session: data.session,
+        needsAccountSetup: !accountType, // يحتاج لتحديد نوع الحساب
+        needsProfileCompletion: accountType && !profileCompleted // يحتاج لإكمال الملف الشخصي
       };
     }
 
     return { success: false, error: 'فشل في تسجيل الدخول' };
   } catch (error) {
     return { success: false, error: 'حدث خطأ أثناء تسجيل الدخول' };
+  }
+}
+
+// تحديد نوع الحساب
+export async function setAccountType(accountType: 'citizen' | 'candidate' | 'mp') {
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+      return { success: false, error: 'المستخدم غير مسجل الدخول' };
+    }
+
+    // تحديث metadata المستخدم
+    const { data: updatedUser, error: updateError } = await supabase.auth.updateUser({
+      data: {
+        ...user.user_metadata,
+        account_type: accountType,
+        account_type_set_at: new Date().toISOString()
+      }
+    });
+
+    if (updateError) {
+      console.error('Account type update error:', updateError);
+      return { success: false, error: 'فشل في تحديد نوع الحساب: ' + updateError.message };
+    }
+
+    return { success: true, data: updatedUser.user };
+  } catch (error: any) {
+    console.error('Unexpected error in setAccountType:', error);
+    return { success: false, error: 'حدث خطأ غير متوقع: ' + (error.message || 'خطأ غير معروف') };
+  }
+}
+
+// إكمال الملف الشخصي
+export async function completeProfile(profileData: any) {
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+      return { success: false, error: 'المستخدم غير مسجل الدخول' };
+    }
+
+    // تحديث metadata المستخدم
+    const { data: updatedUser, error: updateError } = await supabase.auth.updateUser({
+      data: {
+        ...user.user_metadata,
+        ...profileData,
+        profile_completed: true,
+        profile_completed_at: new Date().toISOString()
+      }
+    });
+
+    if (updateError) {
+      console.error('Profile completion error:', updateError);
+      return { success: false, error: 'فشل في إكمال الملف الشخصي: ' + updateError.message };
+    }
+
+    return { success: true, data: updatedUser.user };
+  } catch (error: any) {
+    console.error('Unexpected error in completeProfile:', error);
+    return { success: false, error: 'حدث خطأ غير متوقع: ' + (error.message || 'خطأ غير معروف') };
   }
 }
 

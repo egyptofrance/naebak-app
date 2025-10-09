@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock, LogIn, AlertCircle } from 'lucide-react';
 import { loginSchema, type LoginData } from '@/lib/validations/auth';
 import { signIn } from '@/lib/auth';
@@ -34,7 +35,19 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
       const result = await signIn(data.email, data.password);
       
       if (result.success) {
-        // توجيه للصفحة المطلوبة أو لوحة التحكم
+        // فحص ما إذا كان المستخدم يحتاج لتحديد نوع الحساب
+        if (result.needsAccountSetup) {
+          router.push('/auth/account-setup');
+          return;
+        }
+        
+        // فحص ما إذا كان المستخدم يحتاج لإكمال الملف الشخصي
+        if (result.needsProfileCompletion) {
+          router.push('/auth/profile-completion');
+          return;
+        }
+        
+        // إذا كان كل شيء جاهز، توجيه للصفحة المطلوبة أو لوحة التحكم
         router.push(redirectTo === '/' ? '/dashboard' : redirectTo);
         router.refresh();
       } else {
@@ -233,6 +246,15 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps) {
             </div>
 
 
+            {/* Register Link */}
+            <div className="text-center">
+              <p className="text-sm text-gray-600">
+                ليس لديك حساب؟{' '}
+                <Link href="/auth/register" className="font-medium text-[#004705] hover:underline">
+                  إنشاء حساب جديد
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
       </div>

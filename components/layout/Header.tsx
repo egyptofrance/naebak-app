@@ -156,9 +156,15 @@ export default function Header() {
                   <div className="flex items-center gap-4">
                     <Link
                       href="/auth/login"
+                      className="text-[#2c3e50] hover:text-[#27ae60] transition-colors"
+                    >
+                      دخول
+                    </Link>
+                    <Link
+                      href="/auth/register"
                       className="bg-[#004705] text-white px-4 py-2 rounded-lg hover:bg-[#003604] transition-colors"
                     >
-                      تسجيل الدخول
+                      تسجيل
                     </Link>
                   </div>
                 )}
