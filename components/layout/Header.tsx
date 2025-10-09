@@ -94,7 +94,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[#333333] hover:text-[#004705] font-medium transition-colors text-sm"
+                className="text-[#333333] hover:text-[#0c6303] font-medium transition-colors text-sm"
               >
                 {link.label}
               </Link>
@@ -190,7 +190,7 @@ export default function Header() {
                     </Link>
                     <Link
                       href="/auth/register"
-                      className="bg-[#27ae60] text-white px-4 py-2 rounded-lg hover:bg-[#229954] transition-colors"
+                      className="bg-[#ffa516] text-white px-4 py-2 rounded-lg hover:bg-[#e6941a] transition-colors"
                     >
                       تسجيل
                     </Link>
@@ -239,7 +239,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-[#333333] hover:text-[#004705] hover:bg-[#f5f5f5] font-medium transition-colors px-4 py-2 rounded-lg"
+                  className="text-[#333333] hover:text-[#0c6303] hover:bg-[#f5f5f5] font-medium transition-colors px-4 py-2 rounded-lg"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.label}
@@ -252,14 +252,14 @@ export default function Header() {
                   <hr className="my-2" />
                   <Link
                     href="/dashboard"
-                    className="text-[#333333] hover:text-[#004705] hover:bg-[#f5f5f5] font-medium transition-colors px-4 py-2 rounded-lg"
+                    className="text-[#333333] hover:text-[#0c6303] hover:bg-[#f5f5f5] font-medium transition-colors px-4 py-2 rounded-lg"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     لوحة التحكم
                   </Link>
                   <Link
                     href="/profile"
-                    className="text-[#333333] hover:text-[#004705] hover:bg-[#f5f5f5] font-medium transition-colors px-4 py-2 rounded-lg"
+                    className="text-[#333333] hover:text-[#0c6303] hover:bg-[#f5f5f5] font-medium transition-colors px-4 py-2 rounded-lg"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     الإعدادات

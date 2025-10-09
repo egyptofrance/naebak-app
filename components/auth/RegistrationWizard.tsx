@@ -104,7 +104,7 @@ export default function RegistrationWizard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Progress Steps */}
         <div className="mb-8">
@@ -115,9 +115,9 @@ export default function RegistrationWizard() {
                   <div
                     className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
                       step.completed
-                        ? 'bg-[#004705] border-[#004705] text-white'
+                        ? 'bg-[#0c6303] border-[#0c6303] text-white'
                         : currentStep === step.id
-                        ? 'bg-white border-[#004705] text-[#004705]'
+                        ? 'bg-white border-[#0c6303] text-[#0c6303]'
                         : 'bg-white border-gray-300 text-gray-400'
                     }`}
                   >
@@ -131,7 +131,7 @@ export default function RegistrationWizard() {
                     <div
                       className={`text-sm font-medium ${
                         step.completed || currentStep === step.id
-                          ? 'text-[#004705]'
+                          ? 'text-[#0c6303]'
                           : 'text-gray-400'
                       }`}
                     >

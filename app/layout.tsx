@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import { getNewsItems, getNewsSettings } from "@/lib/news";
 import LayoutWrapperSuspense from "@/components/layout/LayoutWrapperSuspense"; // Suspense wrapper for client component
 import LoadingLayout from "@/components/layout/LoadingLayout";
+import { SUPABASE_STORAGE_CONFIG, IMAGE_FILES } from "@/lib/supabase-config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +31,12 @@ export const metadata: Metadata = {
   keywords: "نائبك، مجلس النواب، مجلس الشيوخ، مصر، نواب، مرشحين، شكاوى، تواصل",
   icons: {
     icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon.ico" },
+      { url: SUPABASE_STORAGE_CONFIG.getPublicImageUrl(IMAGE_FILES.favicon16), sizes: "16x16", type: "image/png" },
+      { url: SUPABASE_STORAGE_CONFIG.getPublicImageUrl(IMAGE_FILES.favicon32), sizes: "32x32", type: "image/png" },
+      { url: SUPABASE_STORAGE_CONFIG.getPublicImageUrl(IMAGE_FILES.faviconIco) },
     ],
     apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: SUPABASE_STORAGE_CONFIG.getPublicImageUrl(IMAGE_FILES.appleTouchIcon), sizes: "180x180", type: "image/png" },
     ],
   },
   manifest: "/site.webmanifest",
