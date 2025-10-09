@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import RegistrationWizard from '@/components/auth/RegistrationWizard';
+import SimpleRegistrationForm from '@/components/auth/SimpleRegistrationForm';
 
 export const metadata: Metadata = {
   title: 'إنشاء حساب جديد - منصة نائبك',
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
-  return <RegistrationWizard />;
+  return <SimpleRegistrationForm />;
 }
