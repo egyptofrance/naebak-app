@@ -198,32 +198,37 @@ export async function getCurrentUser() {
   }
 }
 
-// الحصول على بيانات المستخدم الكاملة من جدول users
-export async function getUserProfile(authId: string) {
+// الحصول على بيانات المستخدم الكاملة من Auth metadata
+export async function getUserProfile(authId?: string) {
   try {
-    const { data, error } = await supabase
-      .from('users')
-      .select(`
-        *,
-        roles(name),
-        governorates(name),
-        profiles(
-          council_id,
-          party_id,
-          district,
-          is_independent,
-          councils(name),
-          parties(name)
-        )
-      `)
-      .eq('auth_id', authId)
-      .single();
-
+    const supabase = createClient();
+    
+    // Get current user if no authId provided
+    const { data: { user }, error } = await supabase.auth.getUser();
+    
     if (error) {
       throw new Error(error.message);
     }
 
-    return { success: true, data };
+    if (!user) {
+      throw new Error('المستخدم غير مسجل الدخول');
+    }
+
+    // If authId provided, make sure it matches current user (security check)
+    if (authId && authId !== user.id) {
+      throw new Error('غير مصرح بالوصول لهذا الملف الشخصي');
+    }
+
+    // Return user data with metadata
+    const profileData = {
+      id: user.id,
+      email: user.email,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+      ...user.user_metadata
+    };
+
+    return { success: true, data: profileData };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
@@ -241,95 +246,65 @@ export async function updateUserRole(data: any): Promise<{success: boolean, erro
       return { success: false, error: 'المستخدم غير مسجل الدخول' };
     }
 
-    // Get role ID from role name
-    const { data: roleData, error: roleError } = await supabase
-      .from('roles')
-      .select('id')
-      .eq('name', data.role)
-      .single();
+    console.log('Updating user role to:', data.role);
 
-    if (roleError) {
-      return { success: false, error: 'الدور المحدد غير صحيح' };
-    }
-
-    // Update user's role
-    const { data: userData, error: updateError } = await supabase
-      .from('users')
-      .update({
-        role_id: roleData.id,
+    // Update user metadata with role information
+    const { data: updatedUser, error: updateError } = await supabase.auth.updateUser({
+      data: {
+        ...user.user_metadata,
+        role: data.role,
         bio: data.bio || null,
+        registration_completed: true,
         updated_at: new Date().toISOString()
-      })
-      .eq('auth_id', user.id)
-      .select()
-      .single();
+      }
+    });
 
     if (updateError) {
-      return { success: false, error: 'فشل في تحديث الدور' };
+      console.error('Role update error:', updateError);
+      return { success: false, error: 'فشل في تحديث الدور: ' + updateError.message };
     }
 
-    // If role is deputy or candidate, create additional profile
-    if (data.role === 'deputy' || data.role === 'candidate') {
-      const profileTable = data.role === 'deputy' ? 'deputy_profiles' : 'candidate_profiles';
-      
-      const { error: profileError } = await supabase
-        .from(profileTable)
-        .insert({
-          user_id: userData.id,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        });
-
-      if (profileError) {
-        console.warn('Failed to create additional profile:', profileError);
-      }
-    }
-
-    return { success: true, data: userData };
-  } catch (error) {
-    return { success: false, error: 'حدث خطأ غير متوقع' };
+    console.log('User role updated successfully');
+    return { success: true, data: updatedUser.user };
+  } catch (error: any) {
+    console.error('Unexpected error in updateUserRole:', error);
+    return { success: false, error: 'حدث خطأ غير متوقع: ' + (error.message || 'خطأ غير معروف') };
   }
 }
 
-// Get all governorates
-export async function getGovernorates(): Promise<{success: boolean, error?: string, data?: any[]}> {
-  try {
-    const supabase = createClient();
-    
-    const { data, error } = await supabase
-      .from('governorates')
-      .select('id, name')
-      .order('name');
+// Get all governorates (static data)
+export function getGovernorates(): {success: boolean, data: any[]} {
+  const governorates = [
+    { id: 1, name: 'القاهرة' },
+    { id: 2, name: 'الجيزة' },
+    { id: 3, name: 'الإسكندرية' },
+    { id: 4, name: 'الدقهلية' },
+    { id: 5, name: 'البحر الأحمر' },
+    { id: 6, name: 'البحيرة' },
+    { id: 7, name: 'الفيوم' },
+    { id: 8, name: 'الغربية' },
+    { id: 9, name: 'الإسماعيلية' },
+    { id: 10, name: 'المنوفية' },
+    { id: 11, name: 'المنيا' },
+    { id: 12, name: 'القليوبية' },
+    { id: 13, name: 'الوادي الجديد' },
+    { id: 14, name: 'السويس' },
+    { id: 15, name: 'أسوان' },
+    { id: 16, name: 'أسيوط' },
+    { id: 17, name: 'بني سويف' },
+    { id: 18, name: 'بورسعيد' },
+    { id: 19, name: 'دمياط' },
+    { id: 20, name: 'الشرقية' },
+    { id: 21, name: 'جنوب سيناء' },
+    { id: 22, name: 'كفر الشيخ' },
+    { id: 23, name: 'مطروح' },
+    { id: 24, name: 'الأقصر' },
+    { id: 25, name: 'قنا' },
+    { id: 26, name: 'شمال سيناء' },
+    { id: 27, name: 'سوهاج' }
+  ];
 
-    if (error) {
-      return { success: false, error: 'فشل في تحميل المحافظات' };
-    }
-
-    return { success: true, data };
-  } catch (error) {
-    return { success: false, error: 'حدث خطأ أثناء تحميل المحافظات' };
-  }
-}
-
-// Get constituencies for a specific governorate
-export async function getConstituencies(governorateId: number): Promise<{success: boolean, error?: string, data?: any[]}> {
-  try {
-    const supabase = createClient();
-    
-    const { data, error } = await supabase
-      .from('constituencies')
-      .select('id, name')
-      .eq('governorate_id', governorateId)
-      .order('name');
-
-    if (error) {
-      return { success: false, error: 'فشل في تحميل الدوائر الانتخابية' };
-    }
-
-    return { success: true, data };
-  } catch (error) {
-    return { success: false, error: 'حدث خطأ أثناء تحميل الدوائر الانتخابية' };
-  }
+  return { success: true, data: governorates };
 }
 
 // Complete user profile (Step 2 of registration) - Updated function

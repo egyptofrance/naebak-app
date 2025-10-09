@@ -32,16 +32,12 @@ export default function ProfileCompletionForm({ onSuccess, onError }: ProfileCom
 
   // Load governorates on component mount
   useEffect(() => {
-    const loadGovernorates = async () => {
-      const result = await getGovernorates();
-      if (result.success && result.data) {
-        setGovernorates(result.data);
-      } else {
-        onError('حدث خطأ أثناء تحميل المحافظات');
-      }
-    };
-
-    loadGovernorates();
+    const result = getGovernorates();
+    if (result.success && result.data) {
+      setGovernorates(result.data);
+    } else {
+      onError('حدث خطأ أثناء تحميل المحافظات');
+    }
   }, [onError]);
 
 
