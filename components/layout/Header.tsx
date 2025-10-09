@@ -9,22 +9,31 @@ import Logo from '../ui/Logo';
 import VisitorCounter from '../ui/VisitorCounter';
 
 export default function Header() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, refreshUser } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const router = useRouter();
 
   const handleSignOut = async () => {
     try {
+      setIsUserMenuOpen(false); // إغلاق القائمة المنسدلة أولاً
+      console.log('Starting sign out process...');
+      
       const result = await signOut();
+      console.log('Sign out result:', result);
+      
       if (result.success) {
+        console.log('Sign out successful, refreshing user state...');
+        await refreshUser(); // تحديث حالة المستخدم فوراً
         router.push('/');
         router.refresh();
       } else {
         console.error('Error signing out:', result.error);
+        alert('حدث خطأ أثناء تسجيل الخروج: ' + result.error);
       }
     } catch (error) {
       console.error('Unexpected error signing out:', error);
+      alert('حدث خطأ غير متوقع أثناء تسجيل الخروج');
     }
   };
 
